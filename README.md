@@ -1,2 +1,2 @@
 # TSP-Group3
-By Collin Gadsby,
+By Collin Gadsby, Alex Caldwell
