@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://dt684w0v0a54m"]
+
+[ext_resource type="Texture2D" uid="uid://c1gshhbkrp3bp" path="res://CardFront.png" id="1_dd2wi"]
+[ext_resource type="Script" uid="uid://5dn2m6dx6spr" path="res://Card.gd" id="1_hael8"]
+
+[node name="Card" type="Node2D" unique_id=1883606514]
+script = ExtResource("1_hael8")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=113467673]
+texture_filter = 1
+position = Vector2(80, 112.5)
+scale = Vector2(5, 5)
+texture = ExtResource("1_dd2wi")
+
+[node name="LabelTop" type="RichTextLabel" parent="." unique_id=338314040]
+offset_left = 10.000008
+offset_top = 10.000008
+offset_right = 40.000008
+offset_bottom = 40.000008
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 23
+bbcode_enabled = true
+text = "10"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="LabelBottom" type="RichTextLabel" parent="." unique_id=838575587]
+offset_left = 150.0
+offset_top = 215.0
+offset_right = 180.0
+offset_bottom = 245.0
+rotation = 3.1415927
+theme_override_font_sizes/normal_font_size = 23
+bbcode_enabled = true
+text = "10"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
