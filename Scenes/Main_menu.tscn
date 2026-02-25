@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://k7dmxnmrhngb"]
+
+[ext_resource type="Script" uid="uid://t7ktmt4fvtny" path="res://Scripts/MainMenu.gd" id="1_pc006"]
+[ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="2_f7j37"]
+
+[node name="Main Menu" type="Node2D" unique_id=1959282502]
+script = ExtResource("1_pc006")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=936375487]
+offset_right = 1152.0
+offset_bottom = 651.0
+size_flags_horizontal = 0
+color = Color(3.3691526e-07, 0.31083924, 3.85046e-07, 1)
+
+[node name="Button_manager" type="Control" parent="." unique_id=845441667]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Singleplayer" type="Button" parent="Button_manager" unique_id=1137194130]
+layout_mode = 0
+offset_left = 476.0
+offset_top = 200.0
+offset_right = 676.0
+offset_bottom = 250.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_f7j37")
+theme_override_font_sizes/font_size = 30
+text = "Singleplayer"
+
+[node name="Multiplayer" type="Button" parent="Button_manager" unique_id=652667087]
+layout_mode = 0
+offset_left = 476.0
+offset_top = 275.0
+offset_right = 676.0
+offset_bottom = 325.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_f7j37")
+theme_override_font_sizes/font_size = 30
+text = "Multiplayer"
+
+[node name="Tutorial" type="Button" parent="Button_manager" unique_id=1536189274]
+layout_mode = 0
+offset_left = 476.0
+offset_top = 350.0
+offset_right = 676.0
+offset_bottom = 400.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_f7j37")
+theme_override_font_sizes/font_size = 30
+text = "Tutorial"
+
+[node name="Quit" type="Button" parent="Button_manager" unique_id=1856511690]
+layout_mode = 0
+offset_left = 476.0
+offset_top = 425.0
+offset_right = 676.0
+offset_bottom = 475.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_f7j37")
+theme_override_font_sizes/font_size = 30
+text = "Quit"
+
+[node name="Label" type="Label" parent="." unique_id=518145859]
+offset_right = 1152.0
+offset_bottom = 183.0
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_f7j37")
+theme_override_font_sizes/font_size = 100
+text = "Rummy 65"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="Button_manager/Singleplayer" to="." method="_on_singleplayer_pressed"]
+[connection signal="pressed" from="Button_manager/Multiplayer" to="." method="_on_multiplayer_pressed"]
+[connection signal="pressed" from="Button_manager/Tutorial" to="." method="_on_tutorial_pressed"]
+[connection signal="pressed" from="Button_manager/Quit" to="." method="_on_quit_pressed"]
