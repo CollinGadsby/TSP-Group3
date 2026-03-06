@@ -2,7 +2,7 @@ extends Node2D
 @onready var deck = $Deck
 @onready var players = [$Player0, $Player1]
 
-var CardScene = preload("res://Card.tscn")
+var CardScene = preload("res://Scenes/Card.tscn")
 
 func DealCards(amount):
 	for i in range(amount):

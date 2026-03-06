@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cnqb5u1nlmw1"]
+
+[ext_resource type="Script" uid="uid://d0k1ma4a7nf5i" path="res://Scripts/GameManager.gd" id="1_j5yw3"]
+[ext_resource type="PackedScene" uid="uid://bo6ji7qel7067" path="res://Scenes/Player.tscn" id="2_kldst"]
+[ext_resource type="Script" uid="uid://cv7yta70ij54h" path="res://Scripts/Deck.gd" id="3_b2bpf"]
+
+[node name="Node2D" type="Node2D" unique_id=116851192]
+script = ExtResource("1_j5yw3")
+
+[node name="Player0" parent="." unique_id=1124740208 instance=ExtResource("2_kldst")]
+
+[node name="Player1" parent="." unique_id=1392807271 instance=ExtResource("2_kldst")]
+
+[node name="Deck" type="Node2D" parent="." unique_id=1798310738]
+script = ExtResource("3_b2bpf")
