@@ -11,10 +11,18 @@ config_version=5
 [application]
 
 config/name="Rummy 65"
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 run/main_scene="uid://k7dmxnmrhngb"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
+<<<<<<<HEADconfig/features=PackedStringArray("4.6", "Forward Plus")
+
+[display]
+
+window/stretch/mode="viewport"
 
 [display]
 
@@ -32,6 +40,12 @@ ClickR={
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":2,"position":Vector2(500, 24),"global_position":Vector2(509, 72),"factor":1.0,"button_index":2,"canceled":false,"pressed":true,"double_click":false,"script":null)
 ]
 }
+<<<<<<< Updated upstream
+=======
+run/main_scene="uid://k7dmxnmrhngb"
+config/features=PackedStringArray("4.6", "Forward Plus")
+config/icon="res://icon.svg"
+>>>>>>> Stashed changes
 
 [physics]
 
