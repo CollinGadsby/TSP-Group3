@@ -12,7 +12,10 @@ config_version=5
 
 config/name="Rummy 65"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 run/main_scene="uid://k7dmxnmrhngb"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
