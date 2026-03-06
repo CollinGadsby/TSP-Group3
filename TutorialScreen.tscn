@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://686ccfujfxer"]
+
+[ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://Card.tscn" id="1_2t656"]
+[ext_resource type="Script" uid="uid://5dn2m6dx6spr" path="res://Scripts/Card.gd" id="1_bgk1a"]
+[ext_resource type="Texture2D" uid="uid://c1gshhbkrp3bp" path="res://Assets/CardFront.png" id="2_vxp8i"]
+[ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://Card.tscn" id="3_m5spy"]
+
+[node name="TutorialUI" type="Control" unique_id=221405381]
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1152.0
+offset_bottom = -648.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_bgk1a")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1477037605]
+z_index = -5
+layout_mode = 0
+offset_right = 1527.0
+offset_bottom = 859.0
+texture = ExtResource("2_vxp8i")
+
+[node name="TextBox" parent="." unique_id=1934741412 instance=ExtResource("1_2t656")]
+visible = false
+
+[node name="Deck" type="Node2D" parent="." unique_id=687817436]
+position = Vector2(244, 247)
+
+[node name="Button" type="Button" parent="Deck" unique_id=756508129]
+offset_left = -11.0
+offset_top = -1.0
+offset_right = 78.0
+offset_bottom = 30.0
+text = "Draw"
+
+[node name="Polygon2D" type="Polygon2D" parent="Deck" unique_id=2035503801]
+position = Vector2(-25.284092, 0)
+scale = Vector2(1.2840909, 1.1292517)
+color = Color(0.6, 0.047999993, 0.047999993, 1)
+polygon = PackedVector2Array(1, 0, 1, 0, 1, -147, 89, -147, 89, 0, 87, 0)
+
+[node name="Label" type="Label" parent="Deck/Polygon2D" unique_id=1679941824]
+offset_left = 25.920355
+offset_top = -85.8976
+offset_right = 65.92036
+offset_bottom = -62.8976
+text = "Deck"
+
+[node name="Discard" type="Node2D" parent="." unique_id=2074694160]
+position = Vector2(405, 166)
+
+[node name="Button" type="Button" parent="Discard" unique_id=1125724030]
+offset_left = -47.0
+offset_top = 84.0
+offset_right = 50.0
+offset_bottom = 115.0
+text = "Discard"
+
+[node name="Card" parent="." unique_id=1883606514 instance=ExtResource("3_m5spy")]
+position = Vector2(738, 446)
+scale = Vector2(0.75, 0.75)
+
+[node name="Card2" parent="." unique_id=1261174828 instance=ExtResource("3_m5spy")]
+z_index = 3
+position = Vector2(608, 447)
+scale = Vector2(0.75, 0.75)
+
+[node name="Card3" parent="." unique_id=727825866 instance=ExtResource("3_m5spy")]
+position = Vector2(479.00003, 444)
+scale = Vector2(0.75, 0.75)
+
+[node name="Card4" parent="." unique_id=498455747 instance=ExtResource("3_m5spy")]
+z_index = 1
+position = Vector2(349, 449.00003)
+scale = Vector2(0.75, 0.75)
+
+[node name="Card5" parent="." unique_id=609546063 instance=ExtResource("3_m5spy")]
+z_index = -1
+position = Vector2(405, 165)
+scale = Vector2(0.75, 0.75)
+
+[node name="Card6" parent="." unique_id=1574490447 instance=ExtResource("3_m5spy")]
+z_index = -1
+position = Vector2(350, 450)
+scale = Vector2(0.75, 0.75)
+
+[connection signal="pressed" from="Deck/Button" to="." method="_on_Deckbutton_pressed"]
+[connection signal="pressed" from="Deck/Button" to="TextBox" method="_on_Deckbutton_pressed"]
+[connection signal="pressed" from="Discard/Button" to="TextBox" method="_on_discard_button_pressed"]
+[connection signal="card_clicked" from="Card" to="." method="_on_card_clicked"]

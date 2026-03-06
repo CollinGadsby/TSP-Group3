@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://dt684w0v0a54m"]
+
+[ext_resource type="Texture2D" uid="uid://c1gshhbkrp3bp" path="res://Assets/CardFront.png" id="1_dd2wi"]
+[ext_resource type="Script" uid="uid://5dn2m6dx6spr" path="res://Scripts/Card.gd" id="1_hael8"]
+[ext_resource type="Script" path="res://CardClicker.gd" id="3_21rx5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_21rx5"]
+size = Vector2(30, 43.6)
+
+[node name="Card" type="Node2D" unique_id=1883606514]
+script = ExtResource("1_hael8")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=113467673]
+texture_filter = 1
+scale = Vector2(5, 5)
+texture = ExtResource("1_dd2wi")
+
+[node name="Area2D" type="Area2D" parent="Sprite2D" unique_id=1763701837]
+script = ExtResource("3_21rx5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/Area2D" unique_id=213842571]
+position = Vector2(0, -0.09999657)
+scale = Vector2(0.9999998, 0.9999998)
+shape = SubResource("RectangleShape2D_21rx5")
+
+[node name="LabelTop" type="RichTextLabel" parent="." unique_id=338314040]
+offset_left = -64.99999
+offset_top = -102.99999
+offset_right = -34.999992
+offset_bottom = -72.99999
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 23
+bbcode_enabled = true
+text = "10"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="LabelBottom" type="RichTextLabel" parent="." unique_id=838575587]
+offset_left = 71.0
+offset_top = 106.0
+offset_right = 101.0
+offset_bottom = 136.0
+rotation = 3.1415927
+theme_override_font_sizes/normal_font_size = 23
+bbcode_enabled = true
+text = "10"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[connection signal="card_action" from="Sprite2D/Area2D" to="." method="_on_area_2d_card_action"]
+[connection signal="card_clicked" from="Sprite2D/Area2D" to="." method="_on_area_2d_card_clicked"]
+[connection signal="card_release" from="Sprite2D/Area2D" to="." method="_on_area_2d_card_release"]
