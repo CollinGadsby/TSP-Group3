@@ -3,6 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://Card.tscn" id="1_2t656"]
 [ext_resource type="Script" uid="uid://5dn2m6dx6spr" path="res://Scripts/Card.gd" id="1_bgk1a"]
 [ext_resource type="Texture2D" uid="uid://c1gshhbkrp3bp" path="res://Assets/CardFront.png" id="2_vxp8i"]
+[ext_resource type="PackedScene" uid="uid://bbjbq5oe3wpf4" path="res://text_box.tscn" id="1_2t656"]
+[ext_resource type="Script" path="res://tutorial_screen.gd" id="1_bgk1a"]
+[ext_resource type="Texture2D" uid="uid://bj5kwoyrq87q5" path="res://Background.jpg" id="2_vxp8i"]
 [ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://Card.tscn" id="3_m5spy"]
 
 [node name="TutorialUI" type="Control" unique_id=221405381]
