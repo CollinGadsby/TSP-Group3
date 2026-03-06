@@ -15,7 +15,7 @@ func DealToPlayer(player):
 		return
 	
 	var card = CardScene.instantiate()
-	card.Setup(cardData.suit, cardData.value)
+	card.Setup(cardData.suit, cardData.value, cardData.wild)
 	player.AddCard(card)
 	
 func _ready():

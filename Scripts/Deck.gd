@@ -12,8 +12,14 @@ func CreateDeck():
 	cards.clear()
 	for suit in Card.Suit.values():
 		for i in range(13 * numDecks):
-			cards.append({"suit": suit, "value": (i % 13 + 1)})
-
+			# TODO implement following format:
+			# if (i % 13 + 1) == round: 
+			# 	cards.append({"suit": suit, "value": (i % 13 + 1), "wild": false});
+			cards.append({"suit": suit, "value": (i % 13 + 1), "wild": false})
+	for deck in numDecks:
+		cards.append({"suit": Card.Suit.DIAMONDS, "value": 14, "wild": true})
+		cards.append({"suit": Card.Suit.SPADES, "value": 14, "wild": true})
+	
 func Shuffle():
 	cards.shuffle()
 	

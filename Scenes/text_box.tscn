@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://bbjbq5oe3wpf4"]
+
+[ext_resource type="Script" path="res://Scripts/text_box.gd" id="1_k7ve7"]
+[ext_resource type="Script" path="res://Scripts/main_text.gd" id="2_d0rgj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ss407"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_d0rgj"]
+
+[node name="TextBox" type="CanvasLayer" unique_id=1934741412]
+script = ExtResource("1_k7ve7")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=485089960]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 59.0
+offset_top = -228.0
+offset_right = -95.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Panel" type="Panel" parent="MarginContainer" unique_id=883787367]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ss407")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1770175726]
+layout_direction = 2
+layout_mode = 2
+
+[node name="MainText" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1472171223]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "Welcome to the tutorial!"
+label_settings = SubResource("LabelSettings_d0rgj")
+script = ExtResource("2_d0rgj")
+
+[node name="Button" type="Button" parent="." unique_id=1293398269]
+offset_left = 913.0
+offset_top = 594.0
+offset_right = 1057.0
+offset_bottom = 653.0
+text = "click to continue*"
+alignment = 2
+
+[connection signal="pressed" from="Button" to="." method="_on_continue_button_pressed"]
