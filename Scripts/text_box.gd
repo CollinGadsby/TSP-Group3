@@ -2,8 +2,8 @@ extends CanvasLayer
 
 @onready var text = $MarginContainer/HBoxContainer/MainText
 @onready var continueButton = $Button
-@onready var deckCounter =0
-@onready var discardCounter =0
+var deckCounter =0
+var discardCounter =0
 
 var messages: Array = [
 	"	Welcome! In this game your goal is to collect matching sets of 3 or more cards, 

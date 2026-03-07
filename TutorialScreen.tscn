@@ -1,15 +1,13 @@
-[gd_scene format=3 uid="uid://686ccfujfxer"]
+[gd_scene format=3 uid="uid://jwnr61q5jira"]
 
-[ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://Card.tscn" id="1_2t656"]
-[ext_resource type="Script" uid="uid://5dn2m6dx6spr" path="res://Scripts/Card.gd" id="1_bgk1a"]
-[ext_resource type="Texture2D" uid="uid://c1gshhbkrp3bp" path="res://Assets/CardFront.png" id="2_vxp8i"]
-[ext_resource type="PackedScene" uid="uid://bbjbq5oe3wpf4" path="res://text_box.tscn" id="1_2t656"]
-[ext_resource type="Script" path="res://tutorial_screen.gd" id="1_bgk1a"]
-[ext_resource type="Texture2D" uid="uid://bj5kwoyrq87q5" path="res://Background.jpg" id="2_vxp8i"]
-[ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://Card.tscn" id="3_m5spy"]
+[ext_resource type="PackedScene" uid="uid://db1pexg04ffif" path="res://text_box.tscn" id="1_2t656"]
+[ext_resource type="Script" uid="uid://r2jqsy810cqy" path="res://tutorial_screen.gd" id="1_bgk1a"]
+[ext_resource type="Texture2D" uid="uid://bj5kwoyrq87q5" path="res://Assets/Background.jpg" id="2_vxp8i"]
+[ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://Scenes/Card.tscn" id="3_m5spy"]
 
 [node name="TutorialUI" type="Control" unique_id=221405381]
 layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -1152.0
@@ -23,8 +21,9 @@ script = ExtResource("1_bgk1a")
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1477037605]
 z_index = -5
 layout_mode = 0
+offset_top = 2.0
 offset_right = 1527.0
-offset_bottom = 859.0
+offset_bottom = 861.0
 texture = ExtResource("2_vxp8i")
 
 [node name="TextBox" parent="." unique_id=1934741412 instance=ExtResource("1_2t656")]
