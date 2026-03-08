@@ -1,0 +1,71 @@
+@startuml
+class GameManager {
++hand_changed : signal
++players : Array[PlayerData]
++current_player_index : int
++round_index : int
++deck : Deck
++start_game(player_names : Array[String])
++start_round()
++deal_cards(number_of_cards: int)
++get_current_player() : PlayerData
++next_turn()
++draw_from_deck()
++draw_from_discard()
++discard_card(index : int)
+}
+
+enum GameState {
+WAITING
+DEALING
+PLAYER_TURN
+ROUND_END
+GAME_END
+}
+
+
+class PlayerData {
++hand_changed : signal
++id : int
++name : String
++hand : Array[CardData]
++score : int
++draw(deck : Deck)
++discard(index : int, deck : Deck)
+}
+
+class Deck {
++number_of_decks : int
++draw_pile : Array[CardData]
++discard_pile : Array[CardData]
++shuffle_draw_deck()
++draw_card() : CardData
++discard(card_data : CardData)
++reshuffle_draw_deck()
+}
+
+class CardData {
++rank : int
++get_value() : int
+}
+
+class Validator {
+{static} validate_out(cards : Array[CardData]) : bool
+}
+enum Suit {
+HEARTS
+DIAMONDS
+CLUBS
+SPADES
+}
+
+GameManager "1" -- "M" PlayerData
+GameManager "1" -- "1" Deck
+Deck "number_of_decks" -- "M" CardData
+PlayerData "1" -- "M" CardData
+Validator "1" -- "M" PlayerData
+
+CardData "+suit" -- Suit
+GameManager "+state" -- GameState
+
+@enduml
