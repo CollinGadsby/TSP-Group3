@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://k7dmxnmrhngb"]
 
-[ext_resource type="Script" uid="uid://t7ktmt4fvtny" path="res://Scripts/MainMenu.gd" id="1_pc006"]
-[ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="2_f7j37"]
+[ext_resource type="Script" uid="uid://t7ktmt4fvtny" path="res://scripts/MainMenu.gd" id="1_d1rr7"]
+[ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="2_ow2sg"]
 
 [node name="Main Menu" type="Node2D" unique_id=1959282502]
-script = ExtResource("1_pc006")
+script = ExtResource("1_d1rr7")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=936375487]
 offset_right = 1152.0
@@ -25,7 +25,7 @@ offset_top = 200.0
 offset_right = 676.0
 offset_bottom = 250.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_f7j37")
+theme_override_fonts/font = ExtResource("2_ow2sg")
 theme_override_font_sizes/font_size = 30
 text = "Singleplayer"
 
@@ -36,7 +36,7 @@ offset_top = 275.0
 offset_right = 676.0
 offset_bottom = 325.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_f7j37")
+theme_override_fonts/font = ExtResource("2_ow2sg")
 theme_override_font_sizes/font_size = 30
 text = "Multiplayer"
 
@@ -47,7 +47,7 @@ offset_top = 350.0
 offset_right = 676.0
 offset_bottom = 400.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_f7j37")
+theme_override_fonts/font = ExtResource("2_ow2sg")
 theme_override_font_sizes/font_size = 30
 text = "Tutorial"
 
@@ -58,7 +58,7 @@ offset_top = 425.0
 offset_right = 676.0
 offset_bottom = 475.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_f7j37")
+theme_override_fonts/font = ExtResource("2_ow2sg")
 theme_override_font_sizes/font_size = 30
 text = "Quit"
 
@@ -67,7 +67,7 @@ offset_right = 1152.0
 offset_bottom = 183.0
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_f7j37")
+theme_override_fonts/font = ExtResource("2_ow2sg")
 theme_override_font_sizes/font_size = 100
 text = "Rummy 65"
 horizontal_alignment = 1

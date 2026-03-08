@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dt684w0v0a54m"]
 
 [ext_resource type="Texture2D" uid="uid://c1gshhbkrp3bp" path="res://Assets/CardFront.png" id="1_dd2wi"]
-[ext_resource type="Script" uid="uid://5dn2m6dx6spr" path="res://Scripts/Card.gd" id="1_hael8"]
+[ext_resource type="Script" uid="uid://5dn2m6dx6spr" path="res://scripts/Card.gd" id="1_hael8"]
 [ext_resource type="Script" path="res://CardClicker.gd" id="3_21rx5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_21rx5"]

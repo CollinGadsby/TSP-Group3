@@ -5,30 +5,30 @@ class_name Card
 enum Suit {HEARTS, DIAMONDS, CLUBS, SPADES}
 
 var suit : Suit
-var value: int  # 1-14 (jokers included)
+var rank: int  # 1-14 (jokers included)
 var isWild : bool
 
 #Added by Carston for dragging and clicking:
 signal card_clicked(card)  # emit self so the manager knows which card
 var selected: bool = false
 var hold=false
-
-func Setup(cardSuit, cardValue, wild):
-	isWild = wild
-	suit = cardSuit
-	value = cardValue
-	UpdateVisual()
 	
+func _init(suit: Suit, rank: int, isWild: bool):
+	self.suit = suit
+	self.rank = rank
+	self.isWild = isWild
+	UpdateVisual()
+
 func UpdateVisual():
 	var valueString
 	var color
-	match value:
+	match rank:
 		1: valueString = "A"
 		11: valueString = "J"
 		12: valueString = "Q"
 		13: valueString = "K"
 		14: valueString = "Joker"
-		_:  valueString = str(value)
+		_:  valueString = str(rank)
 		
 	if (suit == Suit.HEARTS || suit == Suit.DIAMONDS):
 		color = "red"
@@ -36,7 +36,7 @@ func UpdateVisual():
 		color = "black"
 	$LabelTop.bbcode_text = "[color=%s]%s[/color]" % [color, valueString]
 	$LabelBottom.bbcode_text = "[color=%s]%s[/color]" % [color, valueString]
-	if (value != 14):
+	if (rank != 14):
 		$Icon.texture = load("res://Assets/%s.png" % Suit.find_key(suit))
 	else: 
 		$Icon.texture = load("res://Assets/JOKER.png")

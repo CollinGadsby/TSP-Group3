@@ -21,14 +21,14 @@ func _ready() -> void:
 		if not card.card_clicked.is_connected(_on_card_clicked):
 			card.card_clicked.connect(_on_card_clicked)
 
-	hand[0].Setup(1,7, false)
-	hand[0].hide()
-	hand[1].Setup(2,5, false)
-	hand[2].Setup(3,7, false)
-	hand[3].Setup(1,1, false)
-	hand[4].Setup(1,4, true)
-	hand[5].Setup(1,3, false)
-	hand[5].hide()
+	hand[0] = CardData.new(1,7)
+	#hand[0].hide()
+	hand[1] = CardData.new(2,5)
+	hand[2] = CardData.new(3,7)
+	hand[3] = CardData.new(1,1)
+	hand[4] = CardData.new(1,4)
+	hand[5] = CardData.new(1,3)
+	#hand[5].hide()
 
 	if not discard_button.pressed.is_connected(_on_Discard_pressed):
 		discard_button.pressed.connect(_on_Discard_pressed)

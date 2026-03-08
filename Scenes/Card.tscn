@@ -1,23 +1,25 @@
 [gd_scene format=3 uid="uid://dt684w0v0a54m"]
 
-[ext_resource type="Script" uid="uid://5dn2m6dx6spr" path="res://Scripts/Card.gd" id="1_3p273"]
-[ext_resource type="Texture2D" uid="uid://c1gshhbkrp3bp" path="res://Assets/CardFront.png" id="2_h8wm0"]
-[ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="3_h8wm0"]
-[ext_resource type="Texture2D" uid="uid://dfb66k3ohq8ef" path="res://Assets/CLUBS.png" id="4_3m7nw"]
+[ext_resource type="Script" uid="uid://dr3b72yep73be" path="res://scripts/views/card_view.gd" id="1_qf083"]
+[ext_resource type="Texture2D" uid="uid://c1gshhbkrp3bp" path="res://Assets/CardFront.png" id="2_40ytf"]
+[ext_resource type="Script" uid="uid://fhqiy26rveux" path="res://scripts/actions/select_card_action.gd" id="3_40ytf"]
+[ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="3_5273u"]
+[ext_resource type="Texture2D" uid="uid://dfb66k3ohq8ef" path="res://Assets/CLUBS.png" id="4_qbjcq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h8wm0"]
 size = Vector2(30, 43.6)
 
 [node name="Card" type="Node2D" unique_id=1883606514]
-script = ExtResource("1_3p273")
+script = ExtResource("1_qf083")
 
 [node name="FrontCardBacking" type="Sprite2D" parent="." unique_id=113467673]
 texture_filter = 1
 position = Vector2(80, 112.5)
 scale = Vector2(5, 5)
-texture = ExtResource("2_h8wm0")
+texture = ExtResource("2_40ytf")
 
 [node name="Area2D" type="Area2D" parent="FrontCardBacking" unique_id=1749462937]
+script = ExtResource("3_40ytf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FrontCardBacking/Area2D" unique_id=284744525]
 position = Vector2(0, -0.09999657)
@@ -30,7 +32,7 @@ offset_top = 10.0
 offset_right = 75.0
 offset_bottom = 40.0
 theme_override_colors/default_color = Color(0, 0, 0, 1)
-theme_override_fonts/normal_font = ExtResource("3_h8wm0")
+theme_override_fonts/normal_font = ExtResource("3_5273u")
 theme_override_font_sizes/normal_font_size = 30
 bbcode_enabled = true
 text = "10"
@@ -45,7 +47,7 @@ offset_right = 205.0
 offset_bottom = 245.0
 rotation = 3.1415927
 theme_override_colors/default_color = Color(0, 0, 0, 1)
-theme_override_fonts/normal_font = ExtResource("3_h8wm0")
+theme_override_fonts/normal_font = ExtResource("3_5273u")
 theme_override_font_sizes/normal_font_size = 30
 bbcode_enabled = true
 text = "10"
@@ -57,4 +59,4 @@ metadata/_edit_use_anchors_ = true
 texture_filter = 1
 position = Vector2(80, 112.5)
 scale = Vector2(11, 11)
-texture = ExtResource("4_3m7nw")
+texture = ExtResource("4_qbjcq")

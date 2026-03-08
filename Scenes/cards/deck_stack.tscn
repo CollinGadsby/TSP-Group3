@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cduj8ox12bd4m"]
+
+[ext_resource type="Texture2D" uid="uid://c47dr1prmtjtl" path="res://Assets/CardBack.png" id="1_5mjci"]
+[ext_resource type="Script" uid="uid://84kuv6ttqjh6" path="res://scripts/views/deck_view.gd" id="1_wv52t"]
+[ext_resource type="Script" uid="uid://7jnusj6dkc5m" path="res://scripts/actions/deck_stack_action.gd" id="3_som60"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5mjci"]
+size = Vector2(30, 43.6)
+
+[node name="DeckStack" type="Node2D" unique_id=681319466]
+script = ExtResource("1_wv52t")
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1918743860]
+scale = Vector2(3, 3)
+texture = ExtResource("1_5mjci")
+
+[node name="Area2D" type="Area2D" parent="Background" unique_id=1163642221]
+script = ExtResource("3_som60")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/Area2D" unique_id=1747473604]
+shape = SubResource("RectangleShape2D_5mjci")

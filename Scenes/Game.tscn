@@ -1,15 +1,47 @@
 [gd_scene format=3 uid="uid://cnqb5u1nlmw1"]
 
-[ext_resource type="Script" uid="uid://d0k1ma4a7nf5i" path="res://Scripts/GameManager.gd" id="1_j5yw3"]
-[ext_resource type="PackedScene" uid="uid://bo6ji7qel7067" path="res://Scenes/Player.tscn" id="2_kldst"]
-[ext_resource type="Script" uid="uid://cv7yta70ij54h" path="res://Scripts/Deck.gd" id="3_b2bpf"]
+[ext_resource type="Script" uid="uid://cup73yuo2o3wg" path="res://scripts/views/player_hand_view.gd" id="1_qbsmt"]
+[ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://scenes/Card.tscn" id="2_78awf"]
+[ext_resource type="Script" uid="uid://cdvcppo2gubb8" path="res://scripts/managers/game_manager.gd" id="2_cpr0p"]
+[ext_resource type="Script" uid="uid://84kuv6ttqjh6" path="res://scripts/views/deck_view.gd" id="4_78awf"]
+[ext_resource type="PackedScene" uid="uid://cduj8ox12bd4m" path="res://scenes/cards/deck_stack.tscn" id="5_s0nni"]
+[ext_resource type="PackedScene" uid="uid://bsf63rcisxxvt" path="res://scenes/cards/discard_stack.tscn" id="6_aug50"]
 
-[node name="Game" type="Node2D" unique_id=116851192]
-script = ExtResource("1_j5yw3")
+[sub_resource type="GDScript" id="GDScript_ve7bo"]
+script/source = "extends Node2D
 
-[node name="Player0" parent="." unique_id=1124740208 instance=ExtResource("2_kldst")]
+@onready var hand_view = $PlayerHand
+@onready var deck_stack = $DeckStack
+@onready var game_manager = $GameManager
 
-[node name="Player1" parent="." unique_id=1392807271 instance=ExtResource("2_kldst")]
+func _ready():
+	game_manager.start_game([\"test1\", \"test2\"])
+	
+	var player = game_manager.get_current_player()
 
-[node name="Deck" type="Node2D" parent="." unique_id=1798310738]
-script = ExtResource("3_b2bpf")
+	hand_view.player_data = player
+	hand_view.bind()
+	hand_view.refresh()
+	
+	deck_stack.refresh()
+"
+
+[node name="GameScene" type="Node2D" unique_id=116851192]
+script = SubResource("GDScript_ve7bo")
+
+[node name="PlayerHand" type="Node2D" parent="." unique_id=2020304673]
+script = ExtResource("1_qbsmt")
+card_scene = ExtResource("2_78awf")
+
+[node name="TableSprite" type="Sprite2D" parent="." unique_id=1602557932]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1536027237]
+
+[node name="GameManager" type="Node2D" parent="." unique_id=156775829]
+script = ExtResource("2_cpr0p")
+
+[node name="DeckStack" type="Node2D" parent="." unique_id=1946629111]
+script = ExtResource("4_78awf")
+card_scene = ExtResource("5_s0nni")
+
+[node name="DiscardStack" parent="." unique_id=1767410867 instance=ExtResource("6_aug50")]
