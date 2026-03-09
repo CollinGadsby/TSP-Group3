@@ -50,7 +50,6 @@ func start_round():
 func deal_cards(number_of_cards: int):
 	for i in range(number_of_cards):
 		for p in players:
-			print(p.name, " drawing")
 			p.draw(deck)
 			
 	deck.discard(deck.draw_card())	# Flip top card
@@ -77,8 +76,8 @@ func draw_from_discard():
 			discard_stack.empty()
 		else:
 			discard_stack.setup(deck.discard_pile[deck.discard_pile.size() - 1])
-			emit_signal("hand_changed")
-		
+		emit_signal("hand_changed")
+
 func discard_card(index):
 	var player = get_current_player()
 	player.discard(index, deck)
