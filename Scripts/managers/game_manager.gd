@@ -77,7 +77,7 @@ func draw_from_discard():
 		else:
 			discard_stack.setup(deck.discard_pile[deck.discard_pile.size() - 1])
 		emit_signal("hand_changed")
-
+			
 func discard_card(index):
 	var player = get_current_player()
 	player.discard(index, deck)

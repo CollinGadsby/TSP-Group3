@@ -2,12 +2,16 @@ extends Node2D
 
 var player_data: PlayerData
 @onready var game_manager = get_node("/root/GameScene/GameManager")
+@onready var discard_stack = get_node("/root/GameScene/DiscardStack")
 
 @export var card_scene: PackedScene
 
 func refresh() -> void:
 	if player_data == null or card_scene == null:
 		return
+		
+	if game_manager.deck.discard_pile.is_empty():
+		discard_stack.empty()
 
 	for c in get_children():
 		c.queue_free()
