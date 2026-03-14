@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://cnqb5u1nlmw1"]
+
+[ext_resource type="Script" uid="uid://cup73yuo2o3wg" path="res://scripts/views/player_hand_view.gd" id="1_em1bs"]
+[ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://scenes/Card.tscn" id="2_0rn35"]
+[ext_resource type="Script" uid="uid://cdvcppo2gubb8" path="res://scripts/managers/game_manager.gd" id="3_kjrfb"]
+[ext_resource type="Script" uid="uid://84kuv6ttqjh6" path="res://scripts/views/deck_view.gd" id="4_se30j"]
+[ext_resource type="PackedScene" uid="uid://cduj8ox12bd4m" path="res://scenes/cards/deck_stack.tscn" id="5_ktwa8"]
+[ext_resource type="PackedScene" uid="uid://bsf63rcisxxvt" path="res://scenes/cards/discard_stack.tscn" id="6_157ky"]
+[ext_resource type="PackedScene" uid="uid://bxboc4jqtqs77" path="res://scenes/debug/debug_overlay.tscn" id="7_0rn35"]
+
+[sub_resource type="GDScript" id="GDScript_ve7bo"]
+script/source = "extends Node2D
+
+@onready var hand_view = $PlayerHand
+@onready var deck_stack = $DeckStack
+@onready var game_manager = $GameManager
+@onready var debug_overlay = $DebugOverlay
+
+func _ready():
+	debug_overlay.bind()
+	
+	game_manager.start_game([\"test1\"])
+	
+	var player = game_manager.get_current_player()
+
+	hand_view.player_data = player
+	hand_view.bind()
+	
+	hand_view.refresh()
+	
+	deck_stack.refresh()
+"
+
+[node name="GameScene" type="Node2D" unique_id=116851192]
+script = SubResource("GDScript_ve7bo")
+
+[node name="PlayerHand" type="Node2D" parent="." unique_id=2020304673]
+script = ExtResource("1_em1bs")
+card_scene = ExtResource("2_0rn35")
+
+[node name="TableSprite" type="Sprite2D" parent="." unique_id=1602557932]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1536027237]
+
+[node name="RoundLabel" type="RichTextLabel" parent="UI" unique_id=1621254089]
+offset_left = 992.0
+offset_right = 1151.0
+offset_bottom = 40.0
+bbcode_enabled = true
+text = "Round: 
+"
+horizontal_alignment = 2
+
+[node name="GameManager" type="Node2D" parent="." unique_id=156775829]
+script = ExtResource("3_kjrfb")
+
+[node name="DeckStack" type="Node2D" parent="." unique_id=1946629111]
+script = ExtResource("4_se30j")
+card_scene = ExtResource("5_ktwa8")
+
+[node name="DiscardStack" parent="." unique_id=1767410867 instance=ExtResource("6_157ky")]
+position = Vector2(675, 324)
+
+[node name="DebugOverlay" parent="." unique_id=106088277 instance=ExtResource("7_0rn35")]
