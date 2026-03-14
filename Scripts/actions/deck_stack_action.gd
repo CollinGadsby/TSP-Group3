@@ -7,5 +7,4 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 		return
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			print("clicked")
 			game_manager.draw_from_deck()

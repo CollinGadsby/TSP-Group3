@@ -6,3 +6,10 @@ enum GameState {	# Prep for multiplayer
 	DRAWING,
 	DISCARDING
 }
+
+enum Suits {
+	HEARTS, 
+	DIAMONDS, 
+	CLUBS, 
+	SPADES
+}

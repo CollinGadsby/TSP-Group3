@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://686ccfujfxer"]
 
-[ext_resource type="PackedScene" uid="uid://bbjbq5oe3wpf4" path="res://scenes/text_box.tscn" id="1_2t656"]
-[ext_resource type="Script" uid="uid://cbkpi00k41u6k" path="res://scripts/tutorial_screen.gd" id="1_hjlcd"]
+[ext_resource type="PackedScene" uid="uid://bbjbq5oe3wpf4" path="res://Scenes/text_box.tscn" id="1_2t656"]
+[ext_resource type="Script" uid="uid://cbkpi00k41u6k" path="res://Scripts/tutorial_screen.gd" id="1_hjlcd"]
 [ext_resource type="Texture2D" uid="uid://bj5kwoyrq87q5" path="res://Assets/Background.jpg" id="2_vxp8i"]
-[ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://scenes/Card.tscn" id="3_m5spy"]
+[ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://Scenes/cards/Card.tscn" id="3_m5spy"]
 
 [node name="TutorialUI" type="Control" unique_id=221405381]
 layout_mode = 3

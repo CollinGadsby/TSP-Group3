@@ -21,7 +21,7 @@ func empty():
 	
 	$FrontCardBacking.modulate = Color()
 		
-	if (card_data.suit == Card.Suit.HEARTS || card_data.suit == Card.Suit.DIAMONDS):
+	if (card_data.suit == GlobalEnums.Suits.HEARTS || card_data.suit == GlobalEnums.Suits.DIAMONDS):
 		color = "red"
 	else:
 		color = "black"
@@ -45,14 +45,14 @@ func update_visual():
 		14: valueString = "Joker"
 		_:  valueString = str(card_data.rank)
 		
-	if (card_data.suit == Card.Suit.HEARTS || card_data.suit == Card.Suit.DIAMONDS):
+	if (card_data.suit == GlobalEnums.Suits.HEARTS || card_data.suit == GlobalEnums.Suits.DIAMONDS):
 		color = "red"
 	else:
 		color = "black"
 	$LabelTop.bbcode_text = "[color=%s]%s[/color]" % [color, valueString]
 	$LabelBottom.bbcode_text = "[color=%s]%s[/color]" % [color, valueString]
 	if (card_data.rank != 14):
-		$Icon.texture = load("res://Assets/%s.png" % Card.Suit.find_key(card_data.suit))
+		$Icon.texture = load("res://Assets/%s.png" % GlobalEnums.Suits.find_key(card_data.suit))
 	else: 
 		$Icon.texture = load("res://Assets/JOKER.png")
 		

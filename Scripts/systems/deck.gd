@@ -12,9 +12,11 @@ func _init(number_of_decks: int):
 	self.number_of_decks = number_of_decks
 	
 	for i in number_of_decks:
-		for suit in Card.Suit.values():
+		for suit in GlobalEnums.Suits.values():
 			for rank in range(1,14):
 				draw_pile.append(CardData.new(suit, rank))
+		draw_pile.append(CardData.new(1, 14))
+		draw_pile.append(CardData.new(3, 14))
 			
 	shuffle_draw_deck()
 

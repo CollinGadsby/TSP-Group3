@@ -8,6 +8,8 @@ var name: String
 var hand: Array[CardData] = []
 var score: int = 0
 var selected_card = null
+var is_bot: bool = false
+
 
 func draw(deck: Deck):
 	var card: CardData = deck.draw_card()
