@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bxboc4jqtqs77"]
+
+[ext_resource type="Script" uid="uid://2a6l62mi5xor" path="res://scripts/views/debug/debug.gd" id="1_dytaf"]
+
+[node name="DebugOverlay" type="Node2D" unique_id=106088277]
+script = ExtResource("1_dytaf")
+
+[node name="GameState" type="RichTextLabel" parent="." unique_id=2140434545]
+visible = false
+offset_left = 1.0
+offset_right = 160.0
+offset_bottom = 40.0
+bbcode_enabled = true
+text = "Game State: "

@@ -3,15 +3,30 @@ extends Area2D
 @onready var game_manager = get_node("/root/GameScene/GameManager")
 
 func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
+	if not game_manager.state == GlobalEnums.GameState.DISCARDING:
+		return
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			var card_node = get_parent().get_parent()
-			var card_data = card_node.card_data 
-			
-			var player_hand = game_manager.get_current_player().hand
-			var card_index = player_hand.find(card_data)
-			
-			if card_index != -1:
-				game_manager.discard_card(card_index)
-			else:
-				print("Card not found in player's hand!")
+			var select_offset = 40
+				
+			# No selected card
+			if game_manager.get_current_player().selected_card == null:
+				game_manager.get_current_player().selected_card = card_node # Update Selected Card
+				animate_card(card_node, card_node.position.y - select_offset)
+			else: # Had a card selected
+				if game_manager.get_current_player().selected_card == card_node: # Deselecting card
+					animate_card(card_node, card_node.position.y + select_offset)
+					game_manager.get_current_player().selected_card = null
+				else: # Swapping Selection
+					var old_card = game_manager.get_current_player().selected_card
+					animate_card(old_card, old_card.position.y + select_offset)
+					
+					game_manager.get_current_player().selected_card = card_node
+					animate_card(card_node, card_node.position.y - select_offset)
+
+func animate_card(card: Node2D, target_y: float):
+	var tween = card.create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_CUBIC)
+	tween.tween_property(card, "position:y", target_y, 0.15)

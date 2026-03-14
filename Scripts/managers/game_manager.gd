@@ -2,8 +2,11 @@ extends Node2D
 class_name GameManager
 
 @onready var discard_stack = get_node("../DiscardStack")
+@onready var round_label = get_node("../UI/RoundLabel")
+@onready var game_state_label = get_node("../DebugOverlay/GameState")
 
 signal hand_changed
+signal debug_data_changed
 
 var players: Array[PlayerData] = []
 var current_player_index: int = 0
@@ -11,15 +14,7 @@ var current_player_index: int = 0
 var round_index: int = 0
 var deck: Deck
 
-enum GameState {	# Prep for multiplayer
-	WAITING,
-	DEALING,
-	PLAYER_TURN,
-	ROUND_END,
-	GAME_END
-}
-
-var state: GameState = GameState.WAITING
+var state: GlobalEnums.GameState = GlobalEnums.GameState.WAITING
 
 func start_game(player_names):
 	players.clear()
@@ -36,6 +31,7 @@ func start_game(player_names):
 	
 func start_round():
 	round_index += 1
+	round_label.bbcode_text = "[color=%s]%s%d[/color]" % ["white", "Round: ", round_index]
 	
 	var number_of_decks = 1
 	deck = Deck.new(number_of_decks)
@@ -45,7 +41,8 @@ func start_round():
 		
 	deal_cards(round_index + 2)
 	
-	state = GameState.PLAYER_TURN
+	state = GlobalEnums.GameState.DRAWING
+	emit_signal("debug_data_changed")
 	
 func deal_cards(number_of_cards: int):
 	for i in range(number_of_cards):
@@ -67,6 +64,9 @@ func next_turn():
 func draw_from_deck():
 	var player = get_current_player()
 	player.draw(deck)
+
+	state = GlobalEnums.GameState.DISCARDING
+	emit_signal("debug_data_changed")
 	
 func draw_from_discard():
 	var player = get_current_player()
@@ -77,10 +77,15 @@ func draw_from_discard():
 		else:
 			discard_stack.setup(deck.discard_pile[deck.discard_pile.size() - 1])
 		emit_signal("hand_changed")
-			
+		
+	state = GlobalEnums.GameState.DISCARDING
+	emit_signal("debug_data_changed")
+	
 func discard_card(index):
 	var player = get_current_player()
 	player.discard(index, deck)
 	discard_stack.setup(deck.discard_pile[deck.discard_pile.size() - 1])
 	
-	#next_turn()
+	state = GlobalEnums.GameState.DRAWING
+	emit_signal("debug_data_changed")
+	next_turn()
