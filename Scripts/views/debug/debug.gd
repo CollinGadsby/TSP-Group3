@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var game_manager = get_node("/root/GameScene/GameManager")
+@onready var game_manager = get_node("../GameManager")
 
 var enabled: bool = false
 

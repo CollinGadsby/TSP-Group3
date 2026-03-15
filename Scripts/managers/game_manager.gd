@@ -4,9 +4,11 @@ class_name GameManager
 @onready var discard_stack = get_node("../DiscardStack")
 @onready var round_label = get_node("../UI/RoundLabel")
 @onready var game_state_label = get_node("../DebugOverlay/GameState")
+@onready var tutorial = get_node("../../../Tutorial")
 
 signal hand_changed
 signal debug_data_changed
+signal draw_from_deck_sig
 
 var players: Array[PlayerData] = []
 var current_player_index: int = 0
@@ -14,9 +16,15 @@ var current_player_index: int = 0
 var round_index: int = 0
 var deck: Deck
 
+var tutorial_mode: bool = false
+var draw_stack_lock: bool = true
+var draw_discard_lock: bool = true
+var select_lock: bool = true
+var discard_lock: bool = true
+
 var state: GlobalEnums.GameState = GlobalEnums.GameState.WAITING
 
-func start_game(player_names):
+func start_game(player_names) -> void:
 	players.clear()
 	
 	for i in range(player_names.size()):
@@ -28,7 +36,37 @@ func start_game(player_names):
 	
 	discard_stack.discard_stack_pos()
 	start_round()
+
+func start_tutorial(id: int) -> void:
+	players.clear()
 	
+	var p = PlayerData.new()
+	p.id = 0
+	p.name = "TutorialPlayer"
+		
+	players.append(p)
+	
+	discard_stack.discard_stack_pos()
+	
+	for card_data in tutorial.tutorials[id]["hand"]:
+		p.hand.append(card_data)
+	
+	deck = Deck.new(0)
+	deck.discard_pile.clear()
+	deck.draw_pile.clear()
+	
+	for card_data in tutorial.tutorials[id]["draw"]:
+		deck.draw_pile.append(card_data)
+	
+	for card_data in tutorial.tutorials[id]["discard"]:
+		print(card_data.rank)
+		deck.discard_pile.append(card_data)
+	
+	discard_stack.setup(deck.discard_pile[deck.discard_pile.size() - 1])
+	discard_stack.empty()
+	state = GlobalEnums.GameState.DRAWING
+	emit_signal("debug_data_changed")
+
 func start_round():
 	round_index += 1
 	round_label.bbcode_text = "[color=%s]%s%d[/color]" % ["white", "Round: ", round_index]
@@ -67,6 +105,7 @@ func draw_from_deck():
 
 	state = GlobalEnums.GameState.DISCARDING
 	emit_signal("debug_data_changed")
+	emit_signal("draw_from_deck_sig")
 	
 func draw_from_discard():
 	var player = get_current_player()
