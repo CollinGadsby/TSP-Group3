@@ -1,6 +1,7 @@
 extends Node2D
 
 signal card_clicked(card)
+
 var card_data: CardData
 var hold: bool = false
 

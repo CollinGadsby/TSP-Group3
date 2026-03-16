@@ -27,7 +27,6 @@ func draw_card() -> CardData:
 	if draw_pile.is_empty():
 		reshuffle_draw_deck()
 	
-	print("Size: ", draw_pile.size())
 	return draw_pile.pop_back()
 
 func discard(card: CardData) -> void:
