@@ -5,6 +5,8 @@ extends Area2D
 signal select_card_sig(card_data: CardData)
 
 func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
+	if not game_manager:
+		return
 	if not game_manager.state == GlobalEnums.GameState.DISCARDING:
 		return
 	if game_manager.tutorial_mode and game_manager.select_lock:

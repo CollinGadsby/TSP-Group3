@@ -82,7 +82,7 @@ scale = Vector2(0.75, 0.75)
 
 [node name="Card5" parent="." unique_id=609546063 instance=ExtResource("3_m5spy")]
 z_index = -1
-position = Vector2(405, 165)
+position = Vector2(350, 86)
 scale = Vector2(0.75, 0.75)
 
 [node name="Card6" parent="." unique_id=1574490447 instance=ExtResource("3_m5spy")]
