@@ -1,10 +1,14 @@
 extends Area2D
 
-@onready var game_manager = get_node("/root/GameScene/GameManager")
+@onready var game_manager = get_node("../../../GameManager")
+
+signal discard_selected
 
 func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if game_manager.tutorial_mode and game_manager.discard_lock:
+				return
 			var player = game_manager.get_current_player()
 			
 			if player.selected_card != null:
@@ -13,7 +17,11 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 				var card_index = player.hand.find(card_data)
 				
 				animate_discard(card_node, card_index)
+				emit_signal("discard_selected")
+				
 			elif game_manager.state == GlobalEnums.GameState.DRAWING:
+				if game_manager.tutorial_mode and game_manager.draw_discard_lock:
+					return
 				game_manager.draw_from_discard()
 
 func animate_discard(card: Node2D, card_index: int) -> void:
