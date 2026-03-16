@@ -3,6 +3,8 @@ extends Area2D
 @onready var game_manager = get_node("/root/GameScene/GameManager")
 
 func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
+	if not game_manager:
+		return
 	if not game_manager.state == GlobalEnums.GameState.DISCARDING:
 		return
 	if event is InputEventMouseButton:
