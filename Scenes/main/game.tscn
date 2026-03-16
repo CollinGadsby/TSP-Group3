@@ -17,9 +17,7 @@ script/source = "extends Node2D
 @onready var debug_overlay = $DebugOverlay
 
 func _ready():
-	get_window().reset_size()
-	if get_parent().name == \"Tutorial\":
-		return
+	debug_overlay.bind()
 	
 	game_manager.start_game([\"test1\", \"bot1\"])
 	
@@ -29,6 +27,7 @@ func _ready():
 	hand_view.bind()
 	
 	hand_view.refresh()
+	
 	deck_stack.refresh()
 "
 
