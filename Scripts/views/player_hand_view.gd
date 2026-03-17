@@ -1,8 +1,8 @@
 extends Node2D
 
 var player_data: PlayerData
-@onready var game_manager = get_node("/root/GameScene/GameManager")
-@onready var discard_stack = get_node("/root/GameScene/DiscardStack")
+@onready var game_manager = get_node("../GameManager")
+@onready var discard_stack = get_node("../DiscardStack")
 
 @export var card_scene: PackedScene
 
