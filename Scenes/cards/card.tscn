@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://6uapo4hkehba"]
+[gd_scene format=3 uid="uid://dt684w0v0a54m"]
 
-[ext_resource type="Script" uid="uid://dr3b72yep73be" path="res://Scripts/views/card_view.gd" id="1_qf083"]
+[ext_resource type="Script" uid="uid://dr3b72yep73be" path="res://scripts/views/card_view.gd" id="1_qf083"]
 [ext_resource type="Texture2D" uid="uid://c1gshhbkrp3bp" path="res://Assets/CardFront.png" id="2_40ytf"]
-[ext_resource type="Script" uid="uid://fhqiy26rveux" path="res://Scripts/actions/select_card_action.gd" id="3_40ytf"]
+[ext_resource type="Script" uid="uid://fhqiy26rveux" path="res://scripts/actions/select_card_action.gd" id="3_40ytf"]
 [ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="3_5273u"]
 [ext_resource type="Texture2D" uid="uid://dfb66k3ohq8ef" path="res://Assets/CLUBS.png" id="4_qbjcq"]
 
