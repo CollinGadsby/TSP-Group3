@@ -15,7 +15,8 @@ func _init(number_of_decks: int):
 		for suit in CardData.Suit.values():
 			for rank in range(1,14):
 				draw_pile.append(CardData.new(suit, rank))
-			
+		draw_pile.append(CardData.new(CardData.Suit.HEARTS, 14))
+		draw_pile.append(CardData.new(CardData.Suit.CLUBS, 14))
 	shuffle_draw_deck()
 
 func shuffle_draw_deck() -> void:
