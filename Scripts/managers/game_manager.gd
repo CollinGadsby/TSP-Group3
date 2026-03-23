@@ -24,6 +24,9 @@ var discard_lock: bool = true
 
 var state: GlobalEnums.GameState = GlobalEnums.GameState.WAITING
 
+var going_out_player_index: int = -1  # index of the player who went out, -1 if not in last round
+var last_round_remaining: Array = []  # player indices still to take their final turn
+
 func start_game(player_names):
 	players.clear()
 	
@@ -129,10 +132,8 @@ func discard_card(index):
 	var player = get_current_player()
 	player.discard(index, deck)
 	discard_stack.setup(deck.discard_pile[deck.discard_pile.size() - 1])
+	state = GlobalEnums.GameState.WAITING
 	
-	state = GlobalEnums.GameState.DRAWING
-	emit_signal("debug_data_changed")
-	next_turn()
 
 func play_bot_turn():
 	var player = get_current_player()
@@ -153,6 +154,15 @@ func play_bot_turn():
 	
 	print("Player %s discarded the %s of %s" % [player.name, player.hand[index].rank, GlobalEnums.Suits.find_key(player.hand[index].suit)])
 	discard_card(index)
+	if Validator.validate_out(player.hand, round_index + 2):
+		print("VALID HAND — PLAYER GOES OUT")
+		if going_out_player_index != -1:
+			# Already in the last round — this player scores 0, just pass
+			_on_pass_button_pressed()
+		else:
+			trigger_last_round(current_player_index)
+	else:
+		_on_pass_button_pressed()
 	
 func choose_bot_discard_index(player):
 	var straight_ranks = []
@@ -224,3 +234,70 @@ func choose_bot_discard_index(player):
 	
 	# fallback random
 	return randi() % player.hand.size()
+
+
+func _on_verify_button_pressed() -> void:
+	var player_cards = get_current_player().hand
+	print(get_current_player().name , " tries to go out with : ")
+	for card in player_cards:
+		print(card.rank , " , iswild: ", card.is_wild(round_index + 2))
+	if Validator.validate_out(player_cards, round_index + 2):
+		print("VALID HAND — PLAYER GOES OUT")
+		if going_out_player_index != -1:
+			# Already in the last round — this player scores 0, just pass
+			_on_pass_button_pressed()
+		else:
+			trigger_last_round(current_player_index)
+	else:
+		print("Invalid hand")
+
+
+func _on_pass_button_pressed() -> void:
+	if state == GlobalEnums.GameState.WAITING:
+		state = GlobalEnums.GameState.DRAWING
+		emit_signal("debug_data_changed")
+
+		# If we're in the last round, mark this player done and check if all finished
+		if going_out_player_index != -1:
+			last_round_remaining.erase(current_player_index)
+			if last_round_remaining.is_empty():
+				end_round()
+				return
+
+		next_turn()
+
+
+# Called when a player successfully goes out
+func trigger_last_round(out_player_index: int) -> void:
+	going_out_player_index = out_player_index
+	print("Player %s went out! Other players get one more turn." % players[out_player_index].name)
+
+	# Build list of players who still need their final turn, in turn order
+	last_round_remaining.clear()
+	var n = players.size()
+	for i in range(1, n):
+		var idx = (out_player_index + i) % n
+		last_round_remaining.append(idx)
+
+	if last_round_remaining.is_empty():
+		# Only one player in the game — end immediately
+		end_round()
+	else:
+		state = GlobalEnums.GameState.DRAWING
+		emit_signal("debug_data_changed")
+		next_turn()
+
+
+# Score all players and start the next round
+func end_round() -> void:
+	var wild_rank = round_index + 2
+	for p in players:
+		var round_score = Validator.calculate_score(p.hand, wild_rank)
+		p.score += round_score
+		print("Player %s scored %d this round (total: %d)" % [p.name, round_score, p.score])
+
+	going_out_player_index = -1
+	last_round_remaining.clear()
+	current_player_index = 0
+
+	start_round()

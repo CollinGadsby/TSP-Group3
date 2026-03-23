@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cup73yuo2o3wg" path="res://Scripts/views/player_hand_view.gd" id="1_em1bs"]
 [ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://Scenes/cards/card.tscn" id="2_0rn35"]
+[ext_resource type="Script" uid="uid://cjlljnsnsisyu" path="res://Scripts/actions/pass_turn_action.gd" id="3_jxptm"]
 [ext_resource type="Script" uid="uid://cdvcppo2gubb8" path="res://Scripts/managers/game_manager.gd" id="3_kjrfb"]
 [ext_resource type="Script" uid="uid://84kuv6ttqjh6" path="res://Scripts/views/deck_view.gd" id="4_se30j"]
 [ext_resource type="PackedScene" uid="uid://cduj8ox12bd4m" path="res://Scenes/cards/deck_stack.tscn" id="5_ktwa8"]
@@ -31,20 +32,6 @@ func _ready():
 	
 	hand_view.refresh()
 	deck_stack.refresh()
-"
-
-[sub_resource type="GDScript" id="GDScript_dpgfu"]
-script/source = "extends Node
-
-var state: GlobalEnums.GameState
-@onready var game_manager = get_node(\"../../GameManager\")
-signal debug_data_changed
-
-func _on_pressed() -> void:
-	if state == GlobalEnums.GameState.WAITING:
-		state = GlobalEnums.GameState.DRAWING
-		emit_signal(\"debug_data_changed\")
-		game_manager.next_turn()
 "
 
 [node name="GameScene" type="Node2D" unique_id=116851192]
@@ -78,7 +65,7 @@ offset_top = 35.0
 offset_right = 85.0
 offset_bottom = 66.0
 text = "Pass Turn"
-script = SubResource("GDScript_dpgfu")
+script = ExtResource("3_jxptm")
 
 [node name="GameManager" type="Node2D" parent="." unique_id=156775829]
 script = ExtResource("3_kjrfb")
@@ -93,4 +80,4 @@ position = Vector2(675, 324)
 [node name="DebugOverlay" parent="." unique_id=106088277 instance=ExtResource("7_0rn35")]
 
 [connection signal="pressed" from="UI/VerifyButton" to="GameManager" method="_on_verify_button_pressed"]
-[connection signal="pressed" from="UI/PassButton" to="GameManager" method="_on_pass_button_pressed"]
+[connection signal="pressed" from="UI/PassButton" to="UI/PassButton" method="_on_pressed"]

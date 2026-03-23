@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cduj8ox12bd4m"]
 
 [ext_resource type="Texture2D" uid="uid://c47dr1prmtjtl" path="res://Assets/CardBack.png" id="1_5mjci"]
-[ext_resource type="Script" uid="uid://84kuv6ttqjh6" path="res://scripts/views/deck_view.gd" id="1_wv52t"]
-[ext_resource type="Script" uid="uid://7jnusj6dkc5m" path="res://scripts/actions/deck_stack_action.gd" id="3_som60"]
+[ext_resource type="Script" uid="uid://84kuv6ttqjh6" path="res://Scripts/views/deck_view.gd" id="1_wv52t"]
+[ext_resource type="Script" uid="uid://7jnusj6dkc5m" path="res://Scripts/actions/deck_stack_action.gd" id="3_som60"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5mjci"]
 size = Vector2(30, 43.6)
