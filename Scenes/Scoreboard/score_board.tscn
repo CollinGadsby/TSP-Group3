@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://6huqwqcd8ot2"]
+
+[ext_resource type="Script" path="res://Scripts/systems/ScoreBoard_main.gd" id="1_jkpc1"]
+[ext_resource type="PackedScene" uid="uid://0pdha3qnxdg5" path="res://Scenes/Scoreboard/table_scoreboard.tscn" id="2_xxqda"]
+
+[node name="ScoreBoard" type="Node" unique_id=592244676]
+script = ExtResource("1_jkpc1")
+
+[node name="Background" type="Panel" parent="." unique_id=938039215]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -256.0
+offset_right = 300.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Table_scoreboard" parent="Background" unique_id=387250158 instance=ExtResource("2_xxqda")]
+layout_mode = 1
