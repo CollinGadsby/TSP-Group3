@@ -77,6 +77,8 @@ func start_tutorial(id: int) -> void:
 	
 	discard_stack.setup(deck.discard_pile[deck.discard_pile.size() - 1])
 	discard_stack.empty()
+	scoreboard.hide()
+	scoreboard.setup(players)
 	state = GlobalEnums.GameState.DRAWING
 	emit_signal("debug_data_changed")
 
