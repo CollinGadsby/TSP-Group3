@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://6huqwqcd8ot2"]
 
-[ext_resource type="Script" path="res://Scripts/systems/ScoreBoard_main.gd" id="1_jkpc1"]
-[ext_resource type="PackedScene" uid="uid://0pdha3qnxdg5" path="res://Scenes/Scoreboard/table_scoreboard.tscn" id="2_xxqda"]
+[ext_resource type="Script" uid="uid://f8vbdyqbt0cj" path="res://Scripts/systems/ScoreBoard_main.gd" id="1_jkpc1"]
+[ext_resource type="PackedScene" uid="uid://dn7fani1uk6cj" path="res://Scenes/Scoreboard/table_scoreboard.tscn" id="2_xxqda"]
 
 [node name="ScoreBoard" type="Node" unique_id=592244676]
 script = ExtResource("1_jkpc1")
