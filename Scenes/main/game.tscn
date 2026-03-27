@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cup73yuo2o3wg" path="res://Scripts/views/player_hand_view.gd" id="1_em1bs"]
 [ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://Scenes/cards/card.tscn" id="2_0rn35"]
+[ext_resource type="PackedScene" uid="uid://6huqwqcd8ot2" path="res://Scenes/Scoreboard/score_board.tscn" id="3_jxptm"]
 [ext_resource type="Script" uid="uid://cdvcppo2gubb8" path="res://Scripts/managers/game_manager.gd" id="3_kjrfb"]
 [ext_resource type="Script" uid="uid://84kuv6ttqjh6" path="res://Scripts/views/deck_view.gd" id="4_se30j"]
 [ext_resource type="PackedScene" uid="uid://cduj8ox12bd4m" path="res://Scenes/cards/deck_stack.tscn" id="5_ktwa8"]
@@ -79,6 +80,24 @@ offset_right = 85.0
 offset_bottom = 66.0
 text = "Pass Turn"
 script = SubResource("GDScript_dpgfu")
+
+[node name="ScoreboardButton" type="Button" parent="UI" unique_id=463784376]
+offset_left = 1056.0
+offset_top = 29.0
+offset_right = 1154.0
+offset_bottom = 60.0
+text = "ScoreBoard"
+
+[node name="ScoreBoard" parent="UI" unique_id=592244676 instance=ExtResource("3_jxptm")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 600.0
+offset_top = 308.0
+offset_right = -552.0
+offset_bottom = -340.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="GameManager" type="Node2D" parent="." unique_id=156775829]
 script = ExtResource("3_kjrfb")

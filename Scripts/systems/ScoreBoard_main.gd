@@ -1,27 +1,41 @@
-extends Node 
+extends Control
 
-@onready var scoreboard = $Background/Table_scoreboard 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	var columns= ["Round #","Player1", "Player2", "Player3", "Player4"]
-	var data = [
-		["Round 1", 3, 1, 0, 10],
-		["Round 2 ", 5, 7, 2, 0],
-		["Round 3", 20, 0, 15, 8],
-		["Round 4", 0, 19, 4, 12],
-		["Round 5", 7, 0, 13, 2],
-		["Round 6", 9, 11, 7, 0],
-		["Round 7", 15, 0, 14, 24],
-		["Round 8", 0, 7, 20, 6],
-		["Round 9", 12, 5, 0, 17],
-		["Round 10", 0, 19, 25, 22],
-		["Total",0 , 0, 0, 0]
-	]
-	
-	var df = DataFrame.New(data,columns)
-	
-	
+@onready var scoreboard = $Background/Table_scoreboard
+
+var df: DataFrame
+var player_names: Array = []
+const MAX_ROUNDS = 10  # adjust if needed
+
+func setup(players: Array) -> void:
+	player_names = players.map(func(p): return p.name)
+
+	# Build columns dynamically from real player names
+	var columns = PackedStringArray(["Round #"] + player_names)
+
+	# Build empty rows for each round
+	var data = []
+	for i in range(MAX_ROUNDS):
+		var row = ["Round %d" % (i + 1)]
+		for _p in player_names:
+			row.append(0)
+		data.append(row)
+
+	# Add Total row
+	var total_row = ["Total"]
+	for _p in player_names:
+		total_row.append(0)
+	data.append(total_row)
+
+	df = DataFrame.New(data, columns)
 	scoreboard.data = df
-	scoreboard.Render()
-	#update(Round-1, Player#, points):
-	scoreboard.Update_Score(0, "Player1", 9)
+	scoreboard.Re_Render()
+
+func update_round(round_index: int, players: Array) -> void:
+	# round_index is 0-based here (round 1 = index 0)
+	for p in players:
+		var col_name = p.name
+		if col_name in df.columns:
+			df.data[round_index - 1][df.columns.find(col_name)] = p.round_score
+	df.update_totals()
+	scoreboard.data = df
+	scoreboard.Re_Render()

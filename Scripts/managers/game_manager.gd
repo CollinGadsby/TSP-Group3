@@ -5,6 +5,8 @@ class_name GameManager
 @onready var round_label = get_node("../UI/RoundLabel")
 @onready var game_state_label = get_node("../DebugOverlay/GameState")
 @onready var tutorial = get_node("../../../Tutorial")
+@onready var scoreboard = get_node("../UI/ScoreBoard") 
+@onready var scoreboard_button = get_node("../UI/ScoreboardButton")
 
 signal hand_changed
 signal debug_data_changed
@@ -27,8 +29,12 @@ var state: GlobalEnums.GameState = GlobalEnums.GameState.WAITING
 var going_out_player_index: int = -1  # index of the player who went out, -1 if not in last round
 var last_round_remaining: Array = []  # player indices still to take their final turn
 
+func _ready() -> void:
+	scoreboard_button.pressed.connect(_on_scoreboard_button_pressed)
+
 func start_game(player_names):
 	players.clear()
+	
 	
 	for i in range(player_names.size()):
 		var p = PlayerData.new()
@@ -40,6 +46,8 @@ func start_game(player_names):
 		players.append(p)
 	
 	discard_stack.discard_stack_pos()
+	scoreboard.hide()
+	scoreboard.setup(players)
 	start_round()
 
 func start_tutorial(id: int) -> void:
@@ -293,11 +301,15 @@ func end_round() -> void:
 	var wild_rank = round_index + 2
 	for p in players:
 		var round_score = Validator.calculate_score(p.hand, wild_rank)
+		p.round_score = round_score 
 		p.score += round_score
 		print("Player %s scored %d this round (total: %d)" % [p.name, round_score, p.score])
 
+	scoreboard.update_round(round_index, players)
 	going_out_player_index = -1
 	last_round_remaining.clear()
 	current_player_index = 0
 
 	start_round()
+func _on_scoreboard_button_pressed() -> void:
+	scoreboard.visible = !scoreboard.visible

@@ -7,6 +7,7 @@ var id: int
 var name: String
 var hand: Array[CardData] = []
 var score: int = 0
+var round_score: int = 0
 var selected_card = null
 var is_bot: bool = false
 
