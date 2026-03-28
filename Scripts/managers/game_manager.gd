@@ -7,6 +7,8 @@ class_name GameManager
 @onready var tutorial = get_node("../../../Tutorial")
 @onready var scoreboard = get_node("../UI/ScoreBoard") 
 @onready var scoreboard_button = get_node("../UI/ScoreboardButton")
+@onready var how_to_play = get_node("../UI/HowToPlay")  
+@onready var how_to_play_button = get_node("../UI/HowToPlayButton")
 
 signal hand_changed
 signal debug_data_changed
@@ -31,6 +33,7 @@ var last_round_remaining: Array = []  # player indices still to take their final
 
 func _ready() -> void:
 	scoreboard_button.pressed.connect(_on_scoreboard_button_pressed)
+	how_to_play_button.pressed.connect(how_to_play.show_panel) 
 
 func start_game(player_names):
 	players.clear()

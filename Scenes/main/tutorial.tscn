@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://b5j2a7fplksd8"]
 
-[ext_resource type="Script" uid="uid://b8nh1su6561jo" path="res://scripts/systems/tutorial.gd" id="1_3bung"]
-[ext_resource type="PackedScene" uid="uid://cnqb5u1nlmw1" path="res://scenes/main/game.tscn" id="1_6bxba"]
-[ext_resource type="PackedScene" uid="uid://bbjbq5oe3wpf4" path="res://scenes/ui/text_box.tscn" id="3_at1tu"]
+[ext_resource type="Script" uid="uid://b8nh1su6561jo" path="res://Scripts/systems/tutorial.gd" id="1_3bung"]
+[ext_resource type="PackedScene" uid="uid://cnqb5u1nlmw1" path="res://Scenes/main/game.tscn" id="1_6bxba"]
+[ext_resource type="PackedScene" uid="uid://bbjbq5oe3wpf4" path="res://Scenes/ui/text_box.tscn" id="3_at1tu"]
 
 [node name="Tutorial" type="Node2D" unique_id=524398358]
 script = ExtResource("1_3bung")
