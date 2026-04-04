@@ -8,7 +8,7 @@ func _ready() -> void:
 	how_to_play_button.pressed.connect(how_to_play.show_panel)
 	
 func _on_singleplayer_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/main/game.tscn")
+	get_tree().change_scene_to_file("res://scenes/main/solo_config.tscn")
 
 	
 func _on_multiplayer_pressed() -> void:

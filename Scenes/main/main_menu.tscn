@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://t7ktmt4fvtny" path="res://Scripts/actions/main_menu_action.gd" id="1_5vafy"]
 [ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="2_byqcc"]
-[ext_resource type="PackedScene" uid="uid://c2nl7lf6dl8ps" path="res://how_to_play.tscn" id="3_trrnr"]
+[ext_resource type="PackedScene" uid="uid://c2nl7lf6dl8ps" path="res://Scenes/ui/how_to_play.tscn" id="3_trrnr"]
 
 [node name="Main Menu" type="Node2D" unique_id=1959282502]
 script = ExtResource("1_5vafy")

@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://6huqwqcd8ot2" path="res://Scenes/Scoreboard/score_board.tscn" id="3_jxptm"]
 [ext_resource type="Script" uid="uid://cdvcppo2gubb8" path="res://Scripts/managers/game_manager.gd" id="3_kjrfb"]
 [ext_resource type="Script" uid="uid://84kuv6ttqjh6" path="res://Scripts/views/deck_view.gd" id="4_se30j"]
-[ext_resource type="PackedScene" uid="uid://c2nl7lf6dl8ps" path="res://how_to_play.tscn" id="4_uj3lb"]
+[ext_resource type="PackedScene" uid="uid://c2nl7lf6dl8ps" path="res://Scenes/ui/how_to_play.tscn" id="4_uj3lb"]
 [ext_resource type="PackedScene" uid="uid://cduj8ox12bd4m" path="res://Scenes/cards/deck_stack.tscn" id="5_ktwa8"]
 [ext_resource type="PackedScene" uid="uid://bsf63rcisxxvt" path="res://Scenes/cards/discard_stack.tscn" id="6_157ky"]
 [ext_resource type="PackedScene" uid="uid://bxboc4jqtqs77" path="res://Scenes/debug/debug_overlay.tscn" id="7_0rn35"]
@@ -15,22 +15,19 @@ script/source = "extends Node2D
 
 @onready var hand_view = $PlayerHand
 @onready var deck_stack = $DeckStack
-@onready var game_manager = $GameManager
+@onready var game_manager = get_node(\"GameManager\")  # ← change this
 @onready var debug_overlay = $DebugOverlay
 
 func _ready():
 	get_window().reset_size()
 	if get_parent().name == \"Tutorial\":
 		return
-	
 	debug_overlay.bind()
-	game_manager.start_game([\"test1\", \"bot1\"]) # Load from somewhere
-	
-	var player = game_manager.get_current_player()
 
+func on_game_started():
+	var player = game_manager.get_current_player()
 	hand_view.player_data = player
 	hand_view.bind()
-	
 	hand_view.refresh()
 	deck_stack.refresh()
 "
@@ -49,7 +46,7 @@ func _on_pressed() -> void:
 		game_manager.next_turn()
 "
 
-[node name="GameScene" type="Node2D" unique_id=116851192]
+[node name="GameScene3" type="Node2D" unique_id=116851192]
 script = SubResource("GDScript_ve7bo")
 
 [node name="PlayerHand" type="Node2D" parent="." unique_id=2020304673]
