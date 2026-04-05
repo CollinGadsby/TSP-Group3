@@ -1,5 +1,5 @@
 extends Node2D
-
+#This is the single player in between screen
 @onready var bot_count_label = get_node("Panel/VBox/HBox/BotCountLabel")
 @onready var decrease_button = get_node("Panel/VBox/HBox/DecreaseButton")
 @onready var increase_button = get_node("Panel/VBox/HBox/IncreaseButton")
@@ -7,6 +7,7 @@ extends Node2D
 @onready var back_button     = get_node("Panel/VBox/BackButton")
 
 var bot_count: int = 1
+
 const MIN_BOTS = 1
 const MAX_BOTS = 3
 
@@ -33,6 +34,7 @@ func _update_display() -> void:
 	increase_button.disabled = bot_count >= MAX_BOTS
 
 func _on_start_pressed() -> void:
+	
 	GameConfig.bot_count = bot_count
 	
 	get_tree().change_scene_to_file("res://scenes/main/game.tscn")
