@@ -31,7 +31,7 @@ alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 20
-text = "SinglePlayer"
+text = "SinglePlayer Configurations"
 horizontal_alignment = 1
 
 [node name="SubtitleLabel" type="Label" parent="Panel/VBox" unique_id=1940267481]
