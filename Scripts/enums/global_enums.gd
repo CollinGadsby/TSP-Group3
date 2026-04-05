@@ -1,6 +1,6 @@
 extends Node
 
-enum GameState {	# Prep for multiplayer
+enum GameState {
 	WAITING,
 	DEALING,
 	DRAWING,
