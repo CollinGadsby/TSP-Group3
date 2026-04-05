@@ -7,15 +7,18 @@ class_name GameManager
 @onready var tutorial = get_node("../../../Tutorial")
 @onready var scoreboard = get_node("../UI/ScoreBoard") 
 @onready var scoreboard_button = get_node("../UI/ScoreboardButton")
+@onready var how_to_play = get_node("../UI/HowToPlay")  
+@onready var how_to_play_button = get_node("../UI/HowToPlayButton")
 
 signal hand_changed
 signal debug_data_changed
 signal draw_from_deck_sig
+signal game_started 
 
 var players: Array[PlayerData] = []
-var current_player_index: int = 0
+var current_player_index:int = 0
 
-var round_index: int = 0
+var round_index:int = 0
 var deck: Deck
 
 var tutorial_mode: bool = false
@@ -30,11 +33,20 @@ var going_out_player_index: int = -1  # index of the player who went out, -1 if 
 var last_round_remaining: Array = []  # player indices still to take their final turn
 
 func _ready() -> void:
+	
 	scoreboard_button.pressed.connect(_on_scoreboard_button_pressed)
-
+	how_to_play_button.pressed.connect(how_to_play.show_panel) 
+	
+	var names = ["Player"]
+	for i in range(GameConfig.bot_count):
+		names.append("Bot %d " % (i + 1))
+	
+	start_game(names)
+	
 func start_game(player_names):
 	players.clear()
-	
+	round_index = 0        
+	current_player_index = 0
 	
 	for i in range(player_names.size()):
 		var p = PlayerData.new()
@@ -44,12 +56,15 @@ func start_game(player_names):
 			p.is_bot = true   # player 0 = human, others = bots
 		
 		players.append(p)
+		print("Created player: ", p.name, " is_bot: ", p.is_bot)  # ← add this
+
 	
 	discard_stack.discard_stack_pos()
 	scoreboard.hide()
 	scoreboard.setup(players)
 	start_round()
-
+	get_node("..").on_game_started.call_deferred()
+	
 func start_tutorial(id: int) -> void:
 	players.clear()
 	

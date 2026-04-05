@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://upoenv5io4f3"]
+
+[ext_resource type="Script" path="res://Scripts/managers/solo_config.gd" id="1_xn85d"]
+
+[node name="SoloConfig" type="Node2D" unique_id=432925652]
+script = ExtResource("1_xn85d")
+
+[node name="Panel" type="Panel" parent="." unique_id=316227869]
+custom_minimum_size = Vector2(400, 300)
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.0
+offset_top = 6.0
+offset_right = 1158.0
+offset_bottom = 643.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="Panel" unique_id=1190026936]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Panel/VBox" unique_id=650311438]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+text = "SinglePlayer Configurations"
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="Panel/VBox" unique_id=1940267481]
+layout_mode = 2
+text = "Choose # of Bots"
+
+[node name="HBox" type="HBoxContainer" parent="Panel/VBox" unique_id=1575082483]
+layout_mode = 2
+
+[node name="DecreaseButton" type="Button" parent="Panel/VBox/HBox" unique_id=259420456]
+layout_mode = 2
+text = "<"
+
+[node name="BotCountLabel" type="Label" parent="Panel/VBox/HBox" unique_id=1390202012]
+layout_mode = 2
+text = "1"
+
+[node name="IncreaseButton" type="Button" parent="Panel/VBox/HBox" unique_id=683625669]
+layout_mode = 2
+text = ">"
+
+[node name="StartButton" type="Button" parent="Panel/VBox" unique_id=199877309]
+layout_mode = 2
+text = "Start Game"
+
+[node name="BackButton" type="Button" parent="Panel/VBox" unique_id=1335084813]
+layout_mode = 2
+text = "Back"
