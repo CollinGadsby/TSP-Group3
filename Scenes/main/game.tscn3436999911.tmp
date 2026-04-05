@@ -58,9 +58,7 @@ func _on_pressed() -> void:
 	else:
 		if state == GlobalEnums.GameState.WAITING:
 			state = GlobalEnums.GameState.DRAWING
-			var index = game_manager.current_player_index + 200
-			print(\"Out \" + index)
-			block_screen_label.text = \"Player: %d\" % (index)
+			block_screen_label.text = \"Player: %d\" % (game_manager.current_player_index + 1)
 			block_screen.visible = true
 	
 		

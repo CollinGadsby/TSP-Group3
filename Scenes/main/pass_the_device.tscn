@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://gfm4nhpnos3e"]
+
+[ext_resource type="PackedScene" uid="uid://cnqb5u1nlmw1" path="res://scenes/main/game.tscn" id="1_3b58j"]
+[ext_resource type="Script" uid="uid://brv888q7lv6mh" path="res://scripts/actions/pass_the_device.gd" id="1_5x1au"]
+
+[node name="PassTheDevice" type="Node2D" unique_id=1389126990]
+script = ExtResource("1_5x1au")
+
+[node name="GameScene" parent="." unique_id=116851192 instance=ExtResource("1_3b58j")]

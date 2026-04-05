@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 GlobalEnums="*uid://clleell0rkgwk"
+PassTheDeviceSettings="*uid://dtrwu4krvgsun"
 
 [display]
 

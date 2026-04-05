@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://bmithekwxaqmh"]
+
+[ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="1_m2x67"]
+[ext_resource type="Script" uid="uid://ddprcr5ammavx" path="res://scripts/actions/pass_the_device_config.gd" id="1_x178x"]
+
+[node name="Node2D" type="Node2D" unique_id=2075111149]
+script = ExtResource("1_x178x")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1154505524]
+offset_right = 1152.0
+offset_bottom = 651.0
+size_flags_horizontal = 0
+color = Color(3.3691526e-07, 0.31083924, 3.85046e-07, 1)
+
+[node name="Button_manager" type="Control" parent="." unique_id=906859350]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="StartGame" type="Button" parent="Button_manager" unique_id=1937176554]
+layout_mode = 0
+offset_left = 663.0
+offset_top = 541.0
+offset_right = 863.0
+offset_bottom = 591.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_m2x67")
+theme_override_font_sizes/font_size = 30
+text = "Start Game"
+
+[node name="BackToMenu" type="Button" parent="Button_manager" unique_id=1244655145]
+layout_mode = 0
+offset_left = 290.0
+offset_top = 540.0
+offset_right = 490.0
+offset_bottom = 590.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_m2x67")
+theme_override_font_sizes/font_size = 30
+text = "Back to Menu"
+
+[node name="HSlider" type="HSlider" parent="Button_manager" unique_id=1072487705]
+layout_mode = 0
+offset_left = 333.0
+offset_top = 296.0
+offset_right = 799.0
+offset_bottom = 313.0
+min_value = 1.0
+max_value = 4.0
+value = 2.0
+
+[node name="Label" type="Label" parent="." unique_id=1395280792]
+offset_right = 1152.0
+offset_bottom = 183.0
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_m2x67")
+theme_override_font_sizes/font_size = 100
+text = "Pass the Device Config"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayerLabel" type="Label" parent="." unique_id=383706506]
+offset_left = 512.0
+offset_top = 256.0
+offset_right = 628.0
+offset_bottom = 290.0
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_m2x67")
+theme_override_font_sizes/font_size = 30
+text = "Players: 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="Button_manager/StartGame" to="." method="_on_start_game_pressed"]
+[connection signal="pressed" from="Button_manager/BackToMenu" to="." method="_on_back_to_menu_pressed"]
+[connection signal="value_changed" from="Button_manager/HSlider" to="." method="_on_h_slider_value_changed"]

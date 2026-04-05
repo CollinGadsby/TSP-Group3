@@ -7,8 +7,8 @@ script = ExtResource("1_dytaf")
 
 [node name="GameState" type="RichTextLabel" parent="." unique_id=2140434545]
 visible = false
-offset_left = 1.0
-offset_right = 160.0
+offset_left = 121.0
+offset_right = 280.0
 offset_bottom = 40.0
 bbcode_enabled = true
 text = "Game State: "
