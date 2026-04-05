@@ -16,9 +16,9 @@ signal draw_from_deck_sig
 signal game_started 
 
 var players: Array[PlayerData] = []
-var current_player_index: int = 0
+var current_player_index:int = 0
 
-var round_index: int = 0
+var round_index:int = 0
 var deck: Deck
 
 var tutorial_mode: bool = false
@@ -39,7 +39,7 @@ func _ready() -> void:
 	
 	var names = ["Player"]
 	for i in range(GameConfig.bot_count):
-		names.append("Bot %d" % (i + 1))
+		names.append("Bot %d " % (i + 1))
 	
 	start_game(names)
 	

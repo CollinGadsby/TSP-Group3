@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://cuaihjrl10rxc"]
+[gd_scene format=3 uid="uid://upoenv5io4f3"]
 
-[ext_resource type="Script" uid="uid://c5ydik4bf1n4g" path="res://Scripts/managers/solo_config.gd" id="1_xn85d"]
+[ext_resource type="Script" path="res://Scripts/managers/solo_config.gd" id="1_xn85d"]
 
 [node name="SoloConfig" type="Node2D" unique_id=432925652]
 script = ExtResource("1_xn85d")
@@ -13,8 +13,8 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -2.0
 offset_top = 6.0
-offset_right = 398.0
-offset_bottom = 306.0
+offset_right = 1158.0
+offset_bottom = 643.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3

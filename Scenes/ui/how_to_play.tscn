@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c2nl7lf6dl8ps"]
 
-[ext_resource type="Script" uid="uid://dylm6hoye58jb" path="res://Scripts/systems/how_to_play.gd" id="1_1ad62"]
+[ext_resource type="Script" path="res://Scripts/systems/how_to_play.gd" id="1_1ad62"]
 
 [node name="HowToPlay" type="Control" unique_id=1661021046]
 layout_mode = 3

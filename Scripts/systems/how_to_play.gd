@@ -1,7 +1,7 @@
 extends Control
 
 
-# Called when the node enters the scene tree for the first time.
+
 
 func _ready() -> void:
 	var viewport_size = get_viewport().get_visible_rect().size
@@ -16,9 +16,11 @@ func _ready() -> void:
 	hide()
 
 func show_panel() -> void:
+	
 	show()
 
 func _on_close_pressed() -> void:
+	
 	hide()
 
 func get_rules_text() -> String:

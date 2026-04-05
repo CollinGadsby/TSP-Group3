@@ -3,8 +3,8 @@ extends Node2D
 @onready var bot_count_label = get_node("Panel/VBox/HBox/BotCountLabel")
 @onready var decrease_button = get_node("Panel/VBox/HBox/DecreaseButton")
 @onready var increase_button = get_node("Panel/VBox/HBox/IncreaseButton")
-@onready var start_button    = get_node("Panel/VBox/StartButton")
-@onready var back_button     = get_node("Panel/VBox/BackButton")
+@onready var start_button = get_node("Panel/VBox/StartButton")
+@onready var back_button = get_node("Panel/VBox/BackButton")
 
 var bot_count: int = 1
 
