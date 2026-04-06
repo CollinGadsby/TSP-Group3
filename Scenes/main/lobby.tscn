@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://ctmqfopen25sc"]
+
+[ext_resource type="Script" uid="uid://b87w556yq7tnf" path="res://Scripts/actions/lobby_action.gd" id="1_audj6"]
+[ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="1_ugcfn"]
+
+[node name="Lobby" type="Node2D" unique_id=789113260]
+script = ExtResource("1_audj6")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=740531088]
+offset_right = 1152.0
+offset_bottom = 651.0
+size_flags_horizontal = 0
+color = Color(3.3691526e-07, 0.31083924, 3.85046e-07, 1)
+
+[node name="UI" type="Control" parent="." unique_id=1379589165]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CreateLobbyButton" type="Button" parent="UI" unique_id=2002360195]
+layout_mode = 0
+offset_left = 186.0
+offset_top = 200.0
+offset_right = 386.0
+offset_bottom = 250.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_ugcfn")
+theme_override_font_sizes/font_size = 30
+text = "Create Lobby"
+
+[node name="InviteButton" type="Button" parent="UI" unique_id=1971194916]
+layout_mode = 0
+offset_left = 186.0
+offset_top = 275.0
+offset_right = 386.0
+offset_bottom = 325.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_ugcfn")
+theme_override_font_sizes/font_size = 30
+text = "Invite"
+
+[node name="PlayerList" type="VBoxContainer" parent="UI" unique_id=924030639]
+layout_mode = 0
+offset_left = 811.0
+offset_top = 208.0
+offset_right = 851.0
+offset_bottom = 208.0
+
+[node name="StartButton" type="Button" parent="UI" unique_id=1835597302]
+visible = false
+layout_mode = 0
+offset_left = 186.0
+offset_top = 350.0
+offset_right = 386.0
+offset_bottom = 400.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_ugcfn")
+theme_override_font_sizes/font_size = 30
+text = "Start"
+
+[node name="Back" type="Button" parent="UI" unique_id=945143582]
+layout_mode = 0
+offset_left = 186.0
+offset_top = 425.0
+offset_right = 386.0
+offset_bottom = 475.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_ugcfn")
+theme_override_font_sizes/font_size = 30
+text = "Back"
+
+[node name="StatusLabel" type="Label" parent="UI" unique_id=2089071164]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 183.0
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_ugcfn")
+theme_override_font_sizes/font_size = 100
+text = "Multiplayer"
+horizontal_alignment = 1
+vertical_alignment = 1

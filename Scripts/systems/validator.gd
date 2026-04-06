@@ -105,23 +105,35 @@ static func _is_set(group: Array, wild_rank: int) -> bool:
 static func _is_run(group: Array, wild_rank: int) -> bool:
 	var naturals := []
 	var wilds := 0
-
+ 
 	for card in group:
 		if card.is_wild(wild_rank):
 			wilds += 1
 		else:
 			naturals.append(card)
-
+ 
 	if naturals.is_empty():
 		return false
-
-	naturals.sort_custom(func(a, b): return a.rank < b.rank)
-
+ 
+	
+	var has_ace := naturals.any(func(c): return c.rank == 1)
+	if has_ace:
+		var high_ace_naturals := naturals.map(func(c): return 14 if c.rank == 1 else c.rank)
+		if _check_run_ranks(high_ace_naturals, wilds):
+			return true
+ 
+	var ranks := naturals.map(func(c): return c.rank)
+	return _check_run_ranks(ranks, wilds)
+	
+static func _check_run_ranks(ranks: Array, wilds: int) -> bool:
+	var sorted := ranks.duplicate()
+	sorted.sort()
+ 
 	var gaps := 0
-	for i in range(naturals.size() - 1):
-		var diff = naturals[i + 1].rank - naturals[i].rank
+	for i in range(sorted.size() - 1):
+		var diff = sorted[i + 1] - sorted[i]
 		if diff == 0:
 			return false  # Duplicate ranks can't form a run
 		gaps += diff - 1
-
-	return wilds >= gaps and wilds <= naturals.size()
+ 
+	return wilds >= gaps and wilds <= sorted.size()

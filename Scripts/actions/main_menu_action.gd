@@ -12,11 +12,11 @@ func _on_singleplayer_pressed() -> void:
 
 	
 func _on_multiplayer_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/main/game.tscn")
+	get_tree().change_scene_to_file("res://Scenes/main/lobby.tscn")
 
 
 func _on_tutorial_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/main/tutorial.tscn")
+	get_tree().change_scene_to_file("res://Scenes/main/tutorial.tscn")
 
 
 func _on_quit_pressed() -> void:

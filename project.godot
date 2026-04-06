@@ -18,11 +18,17 @@ config/icon="res://icon.svg"
 [autoload]
 
 GlobalEnums="*uid://clleell0rkgwk"
+SteamManager="*res://Scripts/managers/steam_manager.gd"
+NetworkManager="*res://Scripts/managers/network_manager.gd"
 GameConfig="*uid://hxyer08675ev"
 
 [display]
 
 window/stretch/mode="viewport"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godotsteam/plugin.cfg")
 
 [input]
 
@@ -49,3 +55,11 @@ debug_overlay={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+renderer/rendering_method="gl_compatibility"
+
+[steam]
+
+initialization/app_id=0
+initialization/initialize_on_startup=false
+initialization/embed_callbacks=false
+multiplayer_peer/max_channels=4
