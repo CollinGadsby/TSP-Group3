@@ -74,7 +74,7 @@ func start_game(player_names):
 	scoreboard.hide()
 	scoreboard.setup(players)
 	start_round()
-  update_turn_label()
+	update_turn_label()
 	if not _is_singleplayer():
 		_broadcast_state()
 
@@ -95,8 +95,6 @@ func start_pass_the_device() -> void:
 	scoreboard.hide()
 	scoreboard.setup(players)
 	start_round()
-
-	
 	
 func start_tutorial(id: int) -> void:
 	players.clear()
