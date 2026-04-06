@@ -32,8 +32,10 @@ func _ready():
 		var my_steam_id = SteamManager.get_my_steam_id()
 		game_manager.my_player_index = SteamManager.lobby_members.find(my_steam_id)
 	else:
+		player_names = [\"test1\", \"bot1\"]
 		game_manager.my_player_index = 0
-
+	
+	game_manager.start_game(player_names)
 	
 	on_game_started()
 	

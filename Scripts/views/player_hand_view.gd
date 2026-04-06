@@ -43,5 +43,7 @@ func refresh() -> void:
 		add_child(card_node)
 
 func bind():	
-	player_data.hand_changed.connect(refresh)
-	game_manager.hand_changed.connect(refresh)
+	if not player_data.hand_changed.is_connected(refresh):
+		player_data.hand_changed.connect(refresh)
+	if not game_manager.hand_changed.is_connected(refresh):
+		game_manager.hand_changed.connect(refresh)
