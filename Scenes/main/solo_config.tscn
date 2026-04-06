@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://upoenv5io4f3"]
+
+[ext_resource type="Script" uid="uid://c5ydik4bf1n4g" path="res://Scripts/managers/solo_config.gd" id="1_xn85d"]
+[ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="2_gqlxs"]
+
+[node name="SoloConfig" type="Node2D" unique_id=432925652]
+script = ExtResource("1_xn85d")
+
+[node name="Panel" type="Panel" parent="." unique_id=316227869]
+custom_minimum_size = Vector2(400, 300)
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.0
+offset_top = 6.0
+offset_right = 1156.0
+offset_bottom = 650.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ColorRect" type="ColorRect" parent="Panel" unique_id=2125100369]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -6.0
+offset_right = 1154.0
+offset_bottom = 645.0
+size_flags_horizontal = 0
+color = Color(3.3691526e-07, 0.31083924, 3.85046e-07, 1)
+
+[node name="VBox" type="VBoxContainer" parent="Panel" unique_id=1190026936]
+layout_mode = 0
+offset_right = 1155.0
+offset_bottom = 640.0
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Panel/VBox" unique_id=1244297827]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_gqlxs")
+theme_override_font_sizes/font_size = 100
+text = "Single Player Config"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="Panel/VBox" unique_id=72133931]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_gqlxs")
+theme_override_font_sizes/font_size = 55
+text = "Choose # of Bots"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBox" type="HBoxContainer" parent="Panel/VBox" unique_id=1575082483]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="DecreaseButton" type="Button" parent="Panel/VBox/HBox" unique_id=2143604079]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_gqlxs")
+theme_override_font_sizes/font_size = 30
+text = "<"
+
+[node name="BotCountLabel" type="Label" parent="Panel/VBox/HBox" unique_id=889592142]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_gqlxs")
+theme_override_font_sizes/font_size = 100
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="IncreaseButton" type="Button" parent="Panel/VBox/HBox" unique_id=601137229]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_gqlxs")
+theme_override_font_sizes/font_size = 30
+text = ">"
+
+[node name="StartButton" type="Button" parent="Panel/VBox" unique_id=1428678091]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_gqlxs")
+theme_override_font_sizes/font_size = 30
+text = "Start"
+
+[node name="BackButton" type="Button" parent="Panel/VBox" unique_id=1344861408]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_gqlxs")
+theme_override_font_sizes/font_size = 30
+text = "Back"

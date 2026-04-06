@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cdvcppo2gubb8" path="res://Scripts/managers/game_manager.gd" id="3_kjrfb"]
 [ext_resource type="Script" uid="uid://84kuv6ttqjh6" path="res://Scripts/views/deck_view.gd" id="4_se30j"]
 [ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="4_uj3lb"]
+[ext_resource type="PackedScene" uid="uid://c2nl7lf6dl8ps" path="res://Scenes/ui/how_to_play.tscn" id="4_uj3lb"]
 [ext_resource type="PackedScene" uid="uid://cduj8ox12bd4m" path="res://Scenes/cards/deck_stack.tscn" id="5_ktwa8"]
 [ext_resource type="PackedScene" uid="uid://bsf63rcisxxvt" path="res://Scenes/cards/discard_stack.tscn" id="6_157ky"]
 [ext_resource type="PackedScene" uid="uid://bxboc4jqtqs77" path="res://Scenes/debug/debug_overlay.tscn" id="7_0rn35"]
@@ -15,14 +16,13 @@ script/source = "extends Node2D
 
 @onready var hand_view = $PlayerHand
 @onready var deck_stack = $DeckStack
-@onready var game_manager = $GameManager
+@onready var game_manager = get_node(\"GameManager\")  # ← change this
 @onready var debug_overlay = $DebugOverlay
 
 func _ready():
 	get_window().reset_size()
 	if get_parent().name == \"Tutorial\":
 		return
-	
 	debug_overlay.bind()
 	
 	var player_names: Array
@@ -65,7 +65,7 @@ func _on_pressed() -> void:
 		game_manager.next_turn()
 "
 
-[node name="GameScene" type="Node2D" unique_id=116851192]
+[node name="GameScene3" type="Node2D" unique_id=116851192]
 script = SubResource("GDScript_ve7bo")
 
 [node name="PlayerHand" type="Node2D" parent="." unique_id=2020304673]
@@ -126,6 +126,14 @@ offset_bottom = 467.0
 theme_override_fonts/font = ExtResource("4_uj3lb")
 theme_override_font_sizes/font_size = 24
 horizontal_alignment = 1
+[node name="HowToPlayButton" type="Button" parent="UI" unique_id=1534766301]
+offset_left = 1055.0
+offset_top = 66.0
+offset_right = 1158.0
+offset_bottom = 97.0
+text = "How To Play"
+
+[node name="HowToPlay" parent="UI" unique_id=1661021046 instance=ExtResource("4_uj3lb")]
 
 [node name="GameManager" type="Node2D" parent="." unique_id=156775829]
 script = ExtResource("3_kjrfb")

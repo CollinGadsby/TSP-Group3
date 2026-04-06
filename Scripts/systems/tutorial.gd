@@ -22,6 +22,7 @@ extends Node2D
 #	wait_for_discard_selected: waits for the player to select the discard pile with a selected card
 #	wait_for_draw_discard: waits for the player to draw a card from the discard pile
 #	back_to_menu: returns the player back to the main menu
+# 	continue_press:shows the next text box instruction
 #
 #	NOTE feel free to add more functions just remember to put them into the api
 
@@ -29,28 +30,44 @@ var tutorials = [
 	{	## Id:0
 		"steps": [
 			{
-				"dialog": "Welcome, click next to start the tutorial",
+				"dialog": "      Welcome to Rummy 65, click continue to begin the tutorial",
 				"action": Callable(self, "show_hand"),
 				"button_action": true
 			},
 			{
-				"dialog": "Click on the draw pile",
+				"dialog": "      In this tutorial you are going to learn the basics of how a turn works within rummy 65",
+				"action": Callable(self, "continue_press"),
+				"button_action": true
+			},
+			{
+				"dialog": "      Before we begin please click on the How To Play button for a detailed explanation of the rules of this game",
+				"action": Callable(self, "continue_press"),
+				"button_action": true
+			},
+			{
+				"dialog": "      Now let put your newfound knowledge to use! Click continue to begin your turn!",
+				"action": Callable(self, "continue_press"),
+				"button_action": true
+			},
+			{
+				"dialog": "      Click on the draw pile, you must draw from either the top of the deck or discard pile at the start of every turn",
 				"action": Callable(self, "wait_for_draw_stack"),
 				"button_action": false
 			},
 			{
-				"dialog": "Click card the queen of hearts",
+				"dialog": "      Click card the queen of hearts",
 				"action": Callable(self, "wait_for_select_card"),
 				"button_action": false,
 				"card_data": CardData.new(CardData.Suit.HEARTS, 12)
 			},
 			{
-				"dialog": "Click on the discard pile",
+				"dialog": "      Now click on the discard pile to discard your queen",
 				"action": Callable(self, "wait_for_discard_selected"),
 				"button_action": false
 			},
 			{
-				"dialog": "Congrats! Click continue button to return to the main menu",
+				"dialog": "      Congrats you've completed your first turn! Normally you would click the pass turn button for the next player,
+					   for now click the continue button to return to the main menu",
 				"action": Callable(self, "back_to_menu"),
 				"button_action": true
 			}
@@ -127,18 +144,25 @@ func next_step():
 	show_step()
 
 func set_button():
-	text_box_button.pressed.connect(func():
-		text_box.setButtonVisible(false)
-		var step = tutorials[tutorial_index]["steps"][current_step]
-		
-		if step["button_action"]:
-			if step.has("action"):
-				step["action"].call()
-	)
+	if text_box_button.pressed.is_connected(_on_button_pressed):
+		text_box_button.pressed.disconnect(_on_button_pressed)
+	text_box_button.pressed.connect(_on_button_pressed)
+
+func _on_button_pressed():
+	text_box_button.pressed.disconnect(_on_button_pressed)
+	text_box.setButtonVisible(false)
+	var step = tutorials[tutorial_index]["steps"][current_step]
+	if step["button_action"]:
+		if step.has("action"):
+			step["action"].call()
+
 
 func show_hand():
 	hand_view.refresh()
 	discard_stack.update_visual()
+	next_step()
+	
+func continue_press():
 	next_step()
 	
 func wait_for_draw_stack():
