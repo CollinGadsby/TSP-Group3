@@ -12,7 +12,7 @@ func _on_singleplayer_pressed() -> void:
 
 	
 func _on_multiplayer_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/main/lobby.tscn")
+	get_tree().change_scene_to_file("res://scenes/main/multiplayer_mode_menu.tscn")
 
 
 func _on_tutorial_pressed() -> void:

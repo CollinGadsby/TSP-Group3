@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 GlobalEnums="*uid://clleell0rkgwk"
+PassTheDeviceSettings="*uid://dtrwu4krvgsun"
 SteamManager="*res://Scripts/managers/steam_manager.gd"
 NetworkManager="*res://Scripts/managers/network_manager.gd"
 GameConfig="*uid://hxyer08675ev"

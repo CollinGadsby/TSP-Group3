@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://cnqb5u1nlmw1"]
 
-
 [ext_resource type="Script" uid="uid://cup73yuo2o3wg" path="res://scripts/views/player_hand_view.gd" id="1_em1bs"]
 [ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://scenes/cards/card.tscn" id="2_0rn35"]
 [ext_resource type="PackedScene" uid="uid://6huqwqcd8ot2" path="res://scenes/Scoreboard/score_board.tscn" id="3_jxptm"]
@@ -8,7 +7,6 @@
 [ext_resource type="Script" uid="uid://jxc8r05du004" path="res://scripts/views/block_screen_view.gd" id="4_ktwa8"]
 [ext_resource type="Script" uid="uid://84kuv6ttqjh6" path="res://scripts/views/deck_view.gd" id="4_se30j"]
 [ext_resource type="PackedScene" uid="uid://cduj8ox12bd4m" path="res://scenes/cards/deck_stack.tscn" id="5_ktwa8"]
-[ext_resource type="PackedScene" uid="uid://c2nl7lf6dl8ps" path="res://Scenes/ui/how_to_play.tscn" id="4_uj3lb"]
 [ext_resource type="PackedScene" uid="uid://bsf63rcisxxvt" path="res://scenes/cards/discard_stack.tscn" id="6_157ky"]
 [ext_resource type="PackedScene" uid="uid://bxboc4jqtqs77" path="res://scenes/debug/debug_overlay.tscn" id="7_0rn35"]
 
@@ -17,7 +15,7 @@ script/source = "extends Node2D
 
 @onready var hand_view = $PlayerHand
 @onready var deck_stack = $DeckStack
-@onready var game_manager = get_node(\"GameManager\")  # ← change this
+@onready var game_manager = $GameManager
 @onready var debug_overlay = $DebugOverlay
 
 func _ready():
@@ -30,30 +28,13 @@ func _ready():
 		
 	
 	debug_overlay.bind()
+	game_manager.start_game([\"test1\", \"bot1\"]) # Load from somewhere
 	
-	var player_names: Array
-	if SteamManager.lobby_id != 0:
-		player_names = []
-		for member in SteamManager.lobby_members:
-			player_names.append(Steam.getFriendPersonaName(member))
-		var my_steam_id = SteamManager.get_my_steam_id()
-		game_manager.my_player_index = SteamManager.lobby_members.find(my_steam_id)
-	else:
-		game_manager.my_player_index = 0
+	var player = game_manager.get_current_player()
 
-	
-	on_game_started()
-	
-	# Rewire buttons through network-aware request functions
-	$UI/VerifyButton.pressed.disconnect(game_manager._on_verify_button_pressed)
-	$UI/PassButton.pressed.disconnect(game_manager._on_pass_button_pressed)
-	$UI/VerifyButton.pressed.connect(game_manager.request_go_out)
-	$UI/PassButton.pressed.connect(game_manager.request_pass_turn)
-	
-func on_game_started():
-	var player = game_manager.players[game_manager.my_player_index]
 	hand_view.player_data = player
 	hand_view.bind()
+	
 	hand_view.refresh()
 	deck_stack.refresh()
 "
@@ -86,7 +67,7 @@ func _on_pressed() -> void:
 		
 "
 
-[node name="GameScene3" type="Node2D" unique_id=116851192]
+[node name="GameScene" type="Node2D" unique_id=116851192]
 script = SubResource("GDScript_ve7bo")
 
 [node name="PlayerHand" type="Node2D" parent="." unique_id=2020304673]
@@ -107,18 +88,16 @@ text = "Round:
 horizontal_alignment = 2
 
 [node name="VerifyButton" type="Button" parent="UI" unique_id=333772567]
-offset_left = 23.0
-offset_top = 352.0
-offset_right = 86.0
-offset_bottom = 383.0
+offset_right = 8.0
+offset_bottom = 8.0
 text = "Go Out"
 
 [node name="PassButton" type="Button" parent="UI" unique_id=502239468]
-offset_left = 24.0
-offset_top = 387.0
-offset_right = 108.0
-offset_bottom = 418.0
-text = "Finish Turn"
+offset_left = 1.0
+offset_top = 35.0
+offset_right = 85.0
+offset_bottom = 66.0
+text = "Pass Turn"
 script = SubResource("GDScript_dpgfu")
 
 [node name="ScoreboardButton" type="Button" parent="UI" unique_id=463784376]
@@ -167,22 +146,6 @@ theme_override_font_sizes/font_size = 32
 text = "Player: ?"
 horizontal_alignment = 1
 vertical_alignment = 1
-[node name="TurnLabel" type="Label" parent="UI" unique_id=2134026412]
-offset_left = 521.0
-offset_top = 440.0
-offset_right = 721.0
-offset_bottom = 467.0
-theme_override_font_sizes/font_size = 24
-horizontal_alignment = 1
-
-[node name="HowToPlayButton" type="Button" parent="UI" unique_id=1534766301]
-offset_left = 1055.0
-offset_top = 66.0
-offset_right = 1158.0
-offset_bottom = 97.0
-text = "How To Play"
-
-[node name="HowToPlay" parent="UI" unique_id=1661021046 instance=ExtResource("4_uj3lb")]
 
 [node name="GameManager" type="Node2D" parent="." unique_id=156775829]
 script = ExtResource("3_kjrfb")

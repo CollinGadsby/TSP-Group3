@@ -7,6 +7,9 @@ class_name GameManager
 @onready var tutorial = get_node_or_null("../../../Tutorial")
 @onready var scoreboard = get_node("../UI/ScoreBoard") 
 @onready var scoreboard_button = get_node("../UI/ScoreboardButton")
+@onready var block_screen = get_node("../UI/BlockScreen")
+@onready var block_screen_label = get_node("../UI/BlockScreen/Label")
+@onready var hand_view = get_node("../PlayerHand")
 @onready var turn_label = get_node("../UI/TurnLabel")
 @onready var how_to_play = get_node("../UI/HowToPlay")  
 @onready var how_to_play_button = get_node("../UI/HowToPlayButton")
@@ -24,6 +27,8 @@ var round_index:int = 0
 var deck: Deck
 
 var tutorial_mode: bool = false
+var pass_the_device_mode: bool = false
+
 var draw_stack_lock: bool = true
 var draw_discard_lock: bool = true
 var select_lock: bool = true
@@ -69,11 +74,29 @@ func start_game(player_names):
 	scoreboard.hide()
 	scoreboard.setup(players)
 	start_round()
-	update_turn_label()
+  update_turn_label()
 	if not _is_singleplayer():
 		_broadcast_state()
 
 	get_node("..").on_game_started.call_deferred()
+
+	
+func start_pass_the_device() -> void:
+	players.clear()
+	
+	for i in range(PassTheDeviceSettings.player_count):
+		var p = PlayerData.new()
+		p.id = i
+		p.name = "Player %d" % (i + 1)
+		
+		players.append(p)
+	
+	discard_stack.discard_stack_pos()
+	scoreboard.hide()
+	scoreboard.setup(players)
+	start_round()
+
+	
 	
 func start_tutorial(id: int) -> void:
 	players.clear()
@@ -124,6 +147,9 @@ func start_round():
 	emit_signal("debug_data_changed")
 	update_turn_label()
 	
+	hand_view.player_data = players[current_player_index];
+	hand_view.refresh()
+	
 func deal_cards(number_of_cards: int):
 	for i in range(number_of_cards):
 		for p in players:
@@ -151,6 +177,7 @@ func draw_from_deck():
 
 	state = GlobalEnums.GameState.DISCARDING
 	emit_signal("debug_data_changed")
+	emit_signal("hand_changed")
 	emit_signal("draw_from_deck_sig")
 	update_turn_label()
 	
@@ -173,6 +200,7 @@ func discard_card(index):
 	player.discard(index, deck)
 	discard_stack.setup(deck.discard_pile[deck.discard_pile.size() - 1])
 	state = GlobalEnums.GameState.WAITING
+	emit_signal("hand_changed")
 	update_turn_label()
 	
 func play_bot_turn():
@@ -297,21 +325,31 @@ func _on_pass_button_pressed() -> void:
 		state = GlobalEnums.GameState.DRAWING
 		emit_signal("debug_data_changed")
 
+		if pass_the_device_mode == false:
 		# If we're in the last round, mark this player done and check if all finished
-		if going_out_player_index != -1:
-			last_round_remaining.erase(current_player_index)
-			if last_round_remaining.is_empty():
-				end_round()
-				return
+			if going_out_player_index != -1:
+				last_round_remaining.erase(current_player_index)
+				if last_round_remaining.is_empty():
+					end_round()
+					return
 
-		next_turn()
+			next_turn()
+		else:
+			if going_out_player_index != -1:
+				last_round_remaining.erase(current_player_index)
+				if last_round_remaining.is_empty():
+					end_round()
+					return
+			var cpi = (current_player_index + 1) % players.size()
+			block_screen_label.text = "Player: %d" % (cpi + 1) 
+			block_screen.visible = true
 
 
 # Called when a player successfully goes out
 func trigger_last_round(out_player_index: int) -> void:
 	going_out_player_index = out_player_index
 	print("Player %s went out! Other players get one more turn." % players[out_player_index].name)
-
+	emit_signal("hand_changed")
 	# Build list of players who still need their final turn, in turn order
 	last_round_remaining.clear()
 	var n = players.size()
@@ -325,8 +363,12 @@ func trigger_last_round(out_player_index: int) -> void:
 	else:
 		state = GlobalEnums.GameState.DRAWING
 		emit_signal("debug_data_changed")
-		next_turn()
-
+		if pass_the_device_mode == false:
+			next_turn()
+		else:
+			var cpi = (current_player_index + 1) % players.size()
+			block_screen_label.text = "Player: %d" % (cpi + 1) 
+			block_screen.visible = true
 
 # Score all players and start the next round
 func end_round() -> void:

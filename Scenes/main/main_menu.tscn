@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://k7dmxnmrhngb"]
 
-[ext_resource type="Script" uid="uid://t7ktmt4fvtny" path="res://Scripts/actions/main_menu_action.gd" id="1_5vafy"]
+[ext_resource type="Script" uid="uid://t7ktmt4fvtny" path="res://scripts/actions/main_menu_action.gd" id="1_5vafy"]
 [ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="2_byqcc"]
 [ext_resource type="PackedScene" path="res://Scenes/ui/how_to_play.tscn" id="3_trrnr"]
 
