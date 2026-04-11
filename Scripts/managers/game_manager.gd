@@ -361,6 +361,13 @@ func trigger_last_round(out_player_index: int) -> void:
 	else:
 		state = GlobalEnums.GameState.DRAWING
 		emit_signal("debug_data_changed")
+		
+		# Show "going out" announcement briefly before proceeding
+		block_screen_label.text = "%s went out!\nOne final turn each." % players[out_player_index].name
+		block_screen.visible = true
+		await get_tree().create_timer(2.2).timeout
+		block_screen.visible = false
+		
 		if pass_the_device_mode == false:
 			next_turn()
 		else:
@@ -381,7 +388,16 @@ func end_round() -> void:
 	going_out_player_index = -1
 	last_round_remaining.clear()
 	current_player_index = 0
-
+	
+	# Show round summary before moving on
+	var summary = "Round %d Over!\n" % round_index
+	for p in players:
+		summary += "%s: +%d pts (total %d)\n" % [p.name, p.round_score, p.score]
+	block_screen_label.text = summary.strip_edges()
+	block_screen.visible = true
+	await get_tree().create_timer(3.0).timeout
+	block_screen.visible = false
+	
 	# Broadcast scores NOW, before start_round() increments round_index.
 	# Clients need to update the scoreboard for the round that just ended.
 	if not _is_singleplayer():
