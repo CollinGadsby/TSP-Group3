@@ -15,7 +15,7 @@ script/source = "extends Node2D
 
 @onready var hand_view = $PlayerHand
 @onready var deck_stack = $DeckStack
-@onready var game_manager = get_node(\"GameManager\")  # ← change this
+@onready var game_manager = get_node(\"GameManager\")
 @onready var debug_overlay = $DebugOverlay
 
 func _ready():
