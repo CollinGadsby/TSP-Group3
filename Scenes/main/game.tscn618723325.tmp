@@ -1,0 +1,153 @@
+[gd_scene format=3 uid="uid://cnqb5u1nlmw1"]
+
+[ext_resource type="Script" uid="uid://cup73yuo2o3wg" path="res://Scripts/views/player_hand_view.gd" id="1_em1bs"]
+[ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://Scenes/cards/card.tscn" id="2_0rn35"]
+[ext_resource type="PackedScene" uid="uid://6huqwqcd8ot2" path="res://Scenes/Scoreboard/score_board.tscn" id="3_jxptm"]
+[ext_resource type="Script" uid="uid://cdvcppo2gubb8" path="res://Scripts/managers/game_manager.gd" id="3_kjrfb"]
+[ext_resource type="Script" uid="uid://84kuv6ttqjh6" path="res://Scripts/views/deck_view.gd" id="4_se30j"]
+[ext_resource type="PackedScene" uid="uid://c2nl7lf6dl8ps" path="res://Scenes/ui/how_to_play.tscn" id="4_uj3lb"]
+[ext_resource type="PackedScene" uid="uid://cduj8ox12bd4m" path="res://Scenes/cards/deck_stack.tscn" id="5_ktwa8"]
+[ext_resource type="PackedScene" uid="uid://bsf63rcisxxvt" path="res://Scenes/cards/discard_stack.tscn" id="6_157ky"]
+[ext_resource type="PackedScene" uid="uid://bxboc4jqtqs77" path="res://Scenes/debug/debug_overlay.tscn" id="7_0rn35"]
+
+[sub_resource type="GDScript" id="GDScript_ve7bo"]
+script/source = "extends Node2D
+
+@onready var hand_view = $PlayerHand
+@onready var deck_stack = $DeckStack
+@onready var game_manager = get_node(\"GameManager\")  # ← change this
+@onready var debug_overlay = $DebugOverlay
+
+func _ready():
+	get_window().reset_size()
+	if get_parent().name == \"Tutorial\":
+		return
+	debug_overlay.bind()
+	
+	var player_names: Array
+	if SteamManager.lobby_id != 0:
+		player_names = []
+		for member in SteamManager.lobby_members:
+			player_names.append(Steam.getFriendPersonaName(member))
+		var my_steam_id = SteamManager.get_my_steam_id()
+		game_manager.my_player_index = SteamManager.lobby_members.find(my_steam_id)
+	else:
+		player_names = [\"test1\", \"bot1\"]
+		game_manager.my_player_index = 0
+	
+	game_manager.start_game(player_names)
+	
+	on_game_started()
+	
+	# Rewire buttons through network-aware request functions
+	$UI/VerifyButton.pressed.disconnect(game_manager._on_verify_button_pressed)
+	$UI/PassButton.pressed.disconnect(game_manager._on_pass_button_pressed)
+	$UI/VerifyButton.pressed.connect(game_manager.request_go_out)
+	$UI/PassButton.pressed.connect(game_manager.request_pass_turn)
+	
+func on_game_started():
+	var player = game_manager.players[game_manager.my_player_index]
+	hand_view.player_data = player
+	hand_view.bind()
+	hand_view.refresh()
+	deck_stack.refresh()
+"
+
+[sub_resource type="GDScript" id="GDScript_dpgfu"]
+script/source = "extends Node
+
+var state: GlobalEnums.GameState
+@onready var game_manager = get_node(\"../../GameManager\")
+signal debug_data_changed
+
+func _on_pressed() -> void:
+	if state == GlobalEnums.GameState.WAITING:
+		state = GlobalEnums.GameState.DRAWING
+		emit_signal(\"debug_data_changed\")
+		game_manager.next_turn()
+"
+
+[node name="GameScene3" type="Node2D" unique_id=116851192]
+script = SubResource("GDScript_ve7bo")
+
+[node name="PlayerHand" type="Node2D" parent="." unique_id=2020304673]
+script = ExtResource("1_em1bs")
+card_scene = ExtResource("2_0rn35")
+
+[node name="TableSprite" type="Sprite2D" parent="." unique_id=1602557932]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1536027237]
+
+[node name="RoundLabel" type="RichTextLabel" parent="UI" unique_id=1621254089]
+offset_left = 992.0
+offset_right = 1151.0
+offset_bottom = 40.0
+bbcode_enabled = true
+text = "Round: 
+"
+horizontal_alignment = 2
+
+[node name="VerifyButton" type="Button" parent="UI" unique_id=333772567]
+offset_left = 23.0
+offset_top = 352.0
+offset_right = 86.0
+offset_bottom = 383.0
+text = "Go Out"
+
+[node name="PassButton" type="Button" parent="UI" unique_id=502239468]
+offset_left = 24.0
+offset_top = 387.0
+offset_right = 108.0
+offset_bottom = 418.0
+text = "Finish Turn"
+script = SubResource("GDScript_dpgfu")
+
+[node name="ScoreboardButton" type="Button" parent="UI" unique_id=463784376]
+offset_left = 1056.0
+offset_top = 29.0
+offset_right = 1154.0
+offset_bottom = 60.0
+text = "ScoreBoard"
+
+[node name="ScoreBoard" parent="UI" unique_id=592244676 instance=ExtResource("3_jxptm")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 600.0
+offset_top = 308.0
+offset_right = -552.0
+offset_bottom = -340.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TurnLabel" type="Label" parent="UI" unique_id=2134026412]
+offset_left = 521.0
+offset_top = 440.0
+offset_right = 721.0
+offset_bottom = 467.0
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+
+[node name="HowToPlayButton" type="Button" parent="UI" unique_id=1534766301]
+offset_left = 1055.0
+offset_top = 66.0
+offset_right = 1158.0
+offset_bottom = 97.0
+text = "How To Play"
+
+[node name="HowToPlay" parent="UI" unique_id=1661021046 instance=ExtResource("4_uj3lb")]
+
+[node name="GameManager" type="Node2D" parent="." unique_id=156775829]
+script = ExtResource("3_kjrfb")
+
+[node name="DeckStack" type="Node2D" parent="." unique_id=1946629111]
+script = ExtResource("4_se30j")
+card_scene = ExtResource("5_ktwa8")
+
+[node name="DiscardStack" parent="." unique_id=1767410867 instance=ExtResource("6_157ky")]
+position = Vector2(675, 324)
+
+[node name="DebugOverlay" parent="." unique_id=106088277 instance=ExtResource("7_0rn35")]
+
+[connection signal="pressed" from="UI/VerifyButton" to="GameManager" method="_on_verify_button_pressed"]
+[connection signal="pressed" from="UI/PassButton" to="GameManager" method="_on_pass_button_pressed"]

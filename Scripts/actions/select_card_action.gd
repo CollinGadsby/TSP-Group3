@@ -11,28 +11,28 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 		return
 	if game_manager.tutorial_mode and game_manager.select_lock:
 		return
+	if not game_manager._is_my_turn():
+		return
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			var card_node = get_parent().get_parent()
 			var select_offset = 40
-				
+
 			# No selected card
 			if game_manager.get_current_player().selected_card == null:
-				game_manager.get_current_player().selected_card = card_node # Update Selected Card
+				game_manager.get_current_player().selected_card = card_node
 				animate_card(card_node, card_node.position.y - select_offset)
 				emit_signal("select_card_sig", card_node.card_data)
 			else: # Had a card selected
-				if game_manager.get_current_player().selected_card == card_node: # Deselecting card
+				if game_manager.get_current_player().selected_card == card_node: # Deselecting
 					animate_card(card_node, card_node.position.y + select_offset)
 					game_manager.get_current_player().selected_card = null
-				else: # Swapping Selection
+				else: # Swapping selection
 					var old_card = game_manager.get_current_player().selected_card
 					animate_card(old_card, old_card.position.y + select_offset)
-					
 					game_manager.get_current_player().selected_card = card_node
 					animate_card(card_node, card_node.position.y - select_offset)
 					emit_signal("select_card_sig", card_node.card_data)
-					
 
 func animate_card(card: Node2D, target_y: float):
 	var tween = card.create_tween()
