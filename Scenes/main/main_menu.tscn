@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://k7dmxnmrhngb"]
 
-[ext_resource type="Script" uid="uid://t7ktmt4fvtny" path="res://scripts/actions/main_menu_action.gd" id="1_5vafy"]
+[ext_resource type="Script" uid="uid://t7ktmt4fvtny" path="res://Scripts/actions/main_menu_action.gd" id="1_5vafy"]
 [ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="2_byqcc"]
-[ext_resource type="PackedScene" path="res://Scenes/ui/how_to_play.tscn" id="3_trrnr"]
+[ext_resource type="PackedScene" uid="uid://c2nl7lf6dl8ps" path="res://Scenes/ui/how_to_play.tscn" id="3_trrnr"]
 
 [node name="Main Menu" type="Node2D" unique_id=1959282502]
 script = ExtResource("1_5vafy")
@@ -63,10 +63,15 @@ theme_override_fonts/font = ExtResource("2_byqcc")
 theme_override_font_sizes/font_size = 30
 text = "Quit"
 
-[node name="HowToPlayButton" type="Button" parent="Button_manager" unique_id=463340301]
+[node name="HowToPlayButton" type="Button" parent="Button_manager" unique_id=2069355545]
 layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 168.0
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_byqcc")
+theme_override_font_sizes/font_size = 30
 text = "How To Play"
 
 [node name="Label" type="Label" parent="." unique_id=518145859]
