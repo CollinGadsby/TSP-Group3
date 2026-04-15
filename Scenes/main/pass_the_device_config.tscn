@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bmithekwxaqmh"]
 
 [ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="1_m2x67"]
-[ext_resource type="Script" uid="uid://ddprcr5ammavx" path="res://scripts/actions/pass_the_device_config.gd" id="1_x178x"]
+[ext_resource type="Script" uid="uid://ddprcr5ammavx" path="res://Scripts/actions/pass_the_device_config.gd" id="1_x178x"]
 
 [node name="Node2D" type="Node2D" unique_id=2075111149]
 script = ExtResource("1_x178x")

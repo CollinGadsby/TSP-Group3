@@ -34,6 +34,13 @@ var draw_discard_lock: bool = true
 var select_lock: bool = true
 var discard_lock: bool = true
 
+#global guards for desync, race conditions and bots
+var is_ending_round: bool = false
+var bot_turn_in_progress := false
+var bot_turn_queued := false
+var bot_turn_scheduled_for: int = -1
+var turn_locked := false
+
 var state: GlobalEnums.GameState = GlobalEnums.GameState.WAITING
 
 var going_out_player_index: int = -1  # index of the player who went out, -1 if not in last round
@@ -134,6 +141,12 @@ func start_tutorial(id: int) -> void:
 func start_round():
 	round_index += 1
 	round_label.bbcode_text = "[color=%s]%s%d[/color]" % ["white", "Round: ", round_index]
+	#Resets values from previous round
+	going_out_player_index = -1
+	last_round_remaining.clear()
+	is_ending_round = false
+	
+	current_player_index = 0
 	
 	var number_of_decks = 1
 	deck = Deck.new(number_of_decks)
@@ -148,8 +161,14 @@ func start_round():
 	emit_signal("debug_data_changed")
 	update_turn_label()
 	
-	hand_view.player_data = players[current_player_index];
+	if pass_the_device_mode:
+		hand_view.player_data = players[current_player_index]
+	else:
+		hand_view.player_data = players[my_player_index]
 	hand_view.refresh()
+	if SteamManager.is_host or _is_singleplayer():
+		try_start_bot_turn()
+			
 	
 func deal_cards(number_of_cards: int):
 	for i in range(number_of_cards):
@@ -163,14 +182,32 @@ func get_current_player():
 	return players[current_player_index]
 
 func next_turn():
-	current_player_index += 1
+	current_player_index = (current_player_index + 1) % players.size()
 	
-	if current_player_index >= players.size():
-		current_player_index = 0
-	var player = get_current_player()
-	if player.is_bot:
-		play_bot_turn()
+	if going_out_player_index != -1:
+		while current_player_index == going_out_player_index:
+			current_player_index = (current_player_index + 1) % players.size()
+	
+	
+	state = GlobalEnums.GameState.DRAWING
+	emit_signal("debug_data_changed")
+	
+	if pass_the_device_mode:
+		hand_view.player_data = players[current_player_index]
+	else:
+		hand_view.player_data = players[my_player_index]
+	hand_view.refresh()
 	update_turn_label()
+
+	if SteamManager.is_host or _is_singleplayer():
+		var player = get_current_player()
+	
+		if get_current_player().is_bot:
+			try_start_bot_turn()
+		else:
+			# Human turn — just update state/UI properly
+			state = GlobalEnums.GameState.DRAWING
+			emit_signal("debug_data_changed")
 
 func draw_from_deck():
 	var player = get_current_player()
@@ -205,34 +242,125 @@ func discard_card(index):
 	update_turn_label()
 	
 func play_bot_turn():
+	# Stop if round is ending
+	
+	if is_ending_round:
+		return
+	
+	if bot_turn_in_progress:
+		print("BLOCKED duplicate bot turn")
+		return
+
+	bot_turn_in_progress = true
 	var player = get_current_player()
-	
+
+# Prevent duplicate execution
+	if not player.is_bot:
+		bot_turn_in_progress = false
+		return
+	# Delay before action
 	await get_tree().create_timer(0.8).timeout
-	
+	if get_current_player() != player:
+		bot_turn_in_progress = false
+		if bot_turn_queued:
+			bot_turn_queued = false
+			if get_current_player().is_bot:
+				print("RUNNING QUEUED BOT TURN")
+				call_deferred("try_start_bot_turn")
+		return
+
+	# Draw phase
 	if randi() % 2 == 1:
 		draw_from_deck()
 		print("Player %s drew from deck" % player.name)
 	else:
 		draw_from_discard()
 		print("Player %s drew from discard" % player.name)
+
 	var index = choose_bot_discard_index(player)
+
 	print("%s's hand: " % player.name)
 	for card in player.hand:
 		print(card.rank, " of ", GlobalEnums.Suits.find_key(card.suit))
+
+	# Delay before discard
 	await get_tree().create_timer(0.8).timeout
-	
-	print("Player %s discarded the %s of %s" % [player.name, player.hand[index].rank, GlobalEnums.Suits.find_key(player.hand[index].suit)])
+
+	# Re-check again after await
+	if is_ending_round or get_current_player() != player:
+		bot_turn_in_progress = false
+		if bot_turn_queued:
+			bot_turn_queued = false
+			if get_current_player().is_bot:
+				print("RUNNING QUEUED BOT TURN")
+				call_deferred("try_start_bot_turn")
+		return
+
+	# Discard
+	print("Player %s discarded the %s of %s" % [
+		player.name,
+		player.hand[index].rank,
+		GlobalEnums.Suits.find_key(player.hand[index].suit)
+	])
 	discard_card(index)
-	if Validator.validate_out(player.hand, round_index + 2):
-		print("VALID HAND — PLAYER GOES OUT")
-		if going_out_player_index != -1:
-			# Already in the last round — this player scores 0, just pass
-			_on_pass_button_pressed()
-		else:
-			trigger_last_round(current_player_index)
-	else:
-		_on_pass_button_pressed()
 	
+	# Stop if round ended during discard
+	if is_ending_round:
+		bot_turn_in_progress = false
+		
+		return
+	
+	if get_current_player() != player:
+		print("BOT ABORTED (no longer current):", player.name)
+		bot_turn_in_progress = false
+		
+		# run queued turn if needed
+		if bot_turn_queued:
+			bot_turn_queued = false
+			if get_current_player().is_bot:
+				print("RUNNING QUEUED BOT TURN")
+				call_deferred("try_start_bot_turn")
+		return
+	
+	# Check for going out
+		# Check for going out
+	if going_out_player_index == -1:
+		# Only allow going out if NOT already in last round
+		if Validator.validate_out(player.hand, round_index + 2):
+			print("VALID HAND — PLAYER GOES OUT")
+			trigger_last_round(current_player_index)
+		else:
+			_end_turn()
+	else:
+		# Already in last round → no more going out
+		_end_turn()
+
+	bot_turn_in_progress = false
+	bot_turn_scheduled_for = -1
+	# Handle queued bot turn
+	if bot_turn_queued:
+		bot_turn_queued = false
+	
+		if get_current_player().is_bot:
+			print("RUNNING QUEUED BOT TURN")
+			call_deferred("try_start_bot_turn")
+			
+func try_start_bot_turn():
+	if is_ending_round:
+		return
+		
+	var player = get_current_player()
+	if not player.is_bot:
+		return
+	if bot_turn_scheduled_for == current_player_index:
+		return
+	if bot_turn_in_progress:
+		bot_turn_queued = true
+		print("Queued bot turn for:", player.name)
+		return
+	bot_turn_scheduled_for = current_player_index
+	call_deferred("play_bot_turn")	
+
 func choose_bot_discard_index(player):
 	var straight_ranks = []
 	var same_rank = null
@@ -322,31 +450,26 @@ func _on_verify_button_pressed() -> void:
 
 
 func _on_pass_button_pressed() -> void:
-	if state == GlobalEnums.GameState.WAITING:
-		state = GlobalEnums.GameState.DRAWING
-		emit_signal("debug_data_changed")
+	print("PASS PRESSED | state:", state, " | current:", current_player_index)
+	
+	if is_ending_round:
+		print("PASS BLOCKED: round ending")
+		return
+		
+	if state != GlobalEnums.GameState.WAITING and state != GlobalEnums.GameState.DRAWING:
+		return
+	# Prevent acting twice in same frame / wrong player
+	if not _is_my_turn():
+		print("PASS BLOCKED: not your turn")
+		return
 
-		if pass_the_device_mode == false:
-		# If we're in the last round, mark this player done and check if all finished
-			if going_out_player_index != -1:
-				last_round_remaining.erase(current_player_index)
-				if last_round_remaining.is_empty():
-					end_round()
-					return
+	state = GlobalEnums.GameState.DRAWING
+	emit_signal("debug_data_changed")
 
-			next_turn()
-		else:
-			if going_out_player_index != -1:
-				last_round_remaining.erase(current_player_index)
-				if last_round_remaining.is_empty():
-					end_round()
-					return
-			var cpi = (current_player_index + 1) % players.size()
-			block_screen_label.text = "Player: %d" % (cpi + 1) 
-			block_screen.visible = true
-
+	_end_turn()
 # Called when a player successfully goes out
 func trigger_last_round(out_player_index: int) -> void:
+	turn_locked = true
 	going_out_player_index = out_player_index
 	print("Player %s went out! Other players get one more turn." % players[out_player_index].name)
 	emit_signal("hand_changed")
@@ -369,16 +492,47 @@ func trigger_last_round(out_player_index: int) -> void:
 		block_screen.visible = true
 		await get_tree().create_timer(2.2).timeout
 		block_screen.visible = false
+		turn_locked = false
 		
-		if pass_the_device_mode == false:
-			next_turn()
-		else:
-			var cpi = (current_player_index + 1) % players.size()
-			block_screen_label.text = "Player: %d" % (cpi + 1) 
+		
+		_advance_to_next_last_round_player()
+		
+		if pass_the_device_mode:
+			block_screen_label.text = "Player: %d" % (current_player_index + 1)
 			block_screen.visible = true
+
+func _advance_to_next_last_round_player() -> void:
+	if last_round_remaining.is_empty():
+		if not is_ending_round:
+			end_round()
+		return
+
+	var idx = last_round_remaining.pop_front()  # ← KEY FIX
+	if idx == going_out_player_index:
+		return _advance_to_next_last_round_player()
+	
+	current_player_index = idx
+	
+	state = GlobalEnums.GameState.DRAWING
+	emit_signal("debug_data_changed")
+	
+	if pass_the_device_mode:
+		hand_view.player_data = players[current_player_index]
+	else:
+		hand_view.player_data = players[my_player_index]
+	hand_view.refresh()
+	update_turn_label()
+
+	if get_current_player().is_bot:
+		call_deferred("try_start_bot_turn")
+	
+		
 
 # Score all players and start the next round
 func end_round() -> void:
+	if is_ending_round:
+		return
+	is_ending_round = true
 	var wild_rank = round_index + 2
 	for p in players:
 		var round_score = Validator.calculate_score(p.hand, wild_rank)
@@ -407,11 +561,47 @@ func end_round() -> void:
 
 	print("END")
 	start_round()
+	is_ending_round = false
+
 
 	# Broadcast again after start_round() so clients get the new deck's discard top,
 	# updated round_index, and cleared hands.
 	if not _is_singleplayer():
 		_broadcast_state()
+		
+func _end_turn():
+	print("ENDING TURN FOR:", current_player_index)
+
+	# LAST ROUND LOGIC
+	if going_out_player_index != -1:
+		if last_round_remaining.is_empty():
+			if not is_ending_round:
+				end_round()
+			return
+
+		call_deferred("_advance_to_next_last_round_player")
+		return
+
+	# NORMAL TURN FLOW
+	if SteamManager.is_host or _is_singleplayer() or pass_the_device_mode:
+		next_turn()
+
+	# ALWAYS reset to DRAWING for next player
+	state = GlobalEnums.GameState.DRAWING
+	emit_signal("debug_data_changed")
+
+	if pass_the_device_mode:
+		hand_view.player_data = players[current_player_index]
+	else:
+		hand_view.player_data = players[my_player_index]
+
+	hand_view.refresh()
+	update_turn_label()
+
+	if pass_the_device_mode:
+		block_screen_label.text = "Player: %d" % (current_player_index + 1)
+		block_screen.visible = true
+		
 func _on_scoreboard_button_pressed() -> void:
 	scoreboard.visible = !scoreboard.visible
 
@@ -445,7 +635,10 @@ func request_discard_card(index: int) -> void:
 
 func _is_my_turn() -> bool:
 	if pass_the_device_mode:
-		return true
+		# Only allow actions when it's a valid interaction state
+		return state == GlobalEnums.GameState.DRAWING \
+			or state == GlobalEnums.GameState.DISCARDING \
+			or state == GlobalEnums.GameState.WAITING
 	return current_player_index == my_player_index
 	
 func _on_network_action(data: Dictionary) -> void:
@@ -517,6 +710,13 @@ func _apply_state(data: Dictionary) -> void:
 	emit_signal("hand_changed")
 	emit_signal("debug_data_changed")
 	update_turn_label()
+	if pass_the_device_mode:
+		hand_view.player_data = players[current_player_index]
+	else:
+		hand_view.player_data = players[my_player_index]
+
+	hand_view.refresh()
+	
 	
 func _serialize_card(card: CardData) -> Dictionary:
 	return {"rank": card.rank, "suit": card.suit}
@@ -538,7 +738,7 @@ func update_turn_label() -> void:
 
 	match state:
 		GlobalEnums.GameState.DRAWING:
-			if player.is_bot:
+			if get_current_player().is_bot:
 				message = "%s is thinking..." % name
 			elif current_player_index == my_player_index:
 				message = "Your turn — draw a card"

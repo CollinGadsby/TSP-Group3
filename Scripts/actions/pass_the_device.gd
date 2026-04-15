@@ -8,8 +8,9 @@ extends Node2D
 
 func _ready() -> void:
 	debug_overlay.bind()
-	game_manager.start_pass_the_device()
 	game_manager.pass_the_device_mode = true
+	game_manager.start_pass_the_device()
+	
 	
 	var player = game_manager.get_current_player()
 
