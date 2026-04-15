@@ -39,8 +39,9 @@ var state: GlobalEnums.GameState = GlobalEnums.GameState.WAITING
 var going_out_player_index: int = -1  # index of the player who went out, -1 if not in last round
 var last_round_remaining: Array = []  # player indices still to take their final turn
 
-func _ready() -> void:
-	
+func _ready() -> void: # This runs before pass_the_device_is_true
+	if pass_the_device_mode == true:
+		return
 	scoreboard_button.pressed.connect(_on_scoreboard_button_pressed)
 	NetworkManager.action_received.connect(_on_network_action)
 
@@ -49,7 +50,7 @@ func _ready() -> void:
 	var names = ["Player"]
 	for i in range(GameConfig.bot_count):
 		names.append("Bot %d " % (i + 1))
-	
+	print("HERE")
 	start_game(names)
 	
 func start_game(player_names):
@@ -73,6 +74,7 @@ func start_game(player_names):
 	discard_stack.discard_stack_pos()
 	scoreboard.hide()
 	scoreboard.setup(players)
+	print("START")
 	start_round()
 	update_turn_label()
 	if not _is_singleplayer():
@@ -94,6 +96,7 @@ func start_pass_the_device() -> void:
 	discard_stack.discard_stack_pos()
 	scoreboard.hide()
 	scoreboard.setup(players)
+	print("PASS")
 	start_round()
 	
 func start_tutorial(id: int) -> void:
@@ -342,7 +345,6 @@ func _on_pass_button_pressed() -> void:
 			block_screen_label.text = "Player: %d" % (cpi + 1) 
 			block_screen.visible = true
 
-
 # Called when a player successfully goes out
 func trigger_last_round(out_player_index: int) -> void:
 	going_out_player_index = out_player_index
@@ -387,6 +389,7 @@ func end_round() -> void:
 	if not _is_singleplayer():
 		_broadcast_state()
 
+	print("END")
 	start_round()
 
 	# Broadcast again after start_round() so clients get the new deck's discard top,
@@ -402,7 +405,7 @@ func _is_singleplayer() -> bool:
 
 func request_draw_from_deck() -> void:
 	if _is_my_turn():
-		if SteamManager.is_host or _is_singleplayer():
+		if SteamManager.is_host or _is_singleplayer() or pass_the_device_mode:
 			draw_from_deck()
 			_broadcast_state()
 		else:
@@ -410,7 +413,7 @@ func request_draw_from_deck() -> void:
 
 func request_draw_from_discard() -> void:
 	if _is_my_turn():
-		if SteamManager.is_host or _is_singleplayer():
+		if SteamManager.is_host or _is_singleplayer() or pass_the_device_mode:
 			draw_from_discard()
 			_broadcast_state()
 		else:
@@ -418,13 +421,15 @@ func request_draw_from_discard() -> void:
 			
 func request_discard_card(index: int) -> void:
 	if _is_my_turn():
-		if SteamManager.is_host or _is_singleplayer():
+		if SteamManager.is_host or _is_singleplayer() or pass_the_device_mode:
 			discard_card(index)
 			_broadcast_state()
 		else:
 			NetworkManager.send_to_host({"action": "discard", "index": index})
 
 func _is_my_turn() -> bool:
+	if pass_the_device_mode:
+		return true
 	return current_player_index == my_player_index
 	
 func _on_network_action(data: Dictionary) -> void:
