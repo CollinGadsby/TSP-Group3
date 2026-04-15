@@ -40,7 +40,7 @@ var going_out_player_index: int = -1  # index of the player who went out, -1 if 
 var last_round_remaining: Array = []  # player indices still to take their final turn
 
 func _ready() -> void: # This runs before pass_the_device_is_true
-	if pass_the_device_mode == true:
+	if get_node("../../../PassTheDevice"):
 		return
 	scoreboard_button.pressed.connect(_on_scoreboard_button_pressed)
 	NetworkManager.action_received.connect(_on_network_action)
