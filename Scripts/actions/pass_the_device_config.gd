@@ -13,9 +13,9 @@ func update_label(value):
 	player_label.text = "Players: %d" % int(value)
 
 func _on_back_to_menu_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/main/main_menu.tscn")
+	get_tree().change_scene_to_file("res://Scenes/main/main_menu.tscn")
 
 
 func _on_start_game_pressed() -> void:
 	PassTheDeviceSettings.player_count = player_slider.value
-	get_tree().change_scene_to_file("res://scenes/main/pass_the_device.tscn")
+	get_tree().change_scene_to_file("res://Scenes/main/pass_the_device.tscn")

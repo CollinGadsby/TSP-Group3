@@ -9,6 +9,8 @@ var player_data: PlayerData
 func refresh() -> void:
 	if player_data == null or card_scene == null:
 		return
+	if player_data.is_bot:
+		return  # Never show a bot's hand
 	player_data.hand.sort_custom(func(a, b): return a.rank < b.rank)
 	if game_manager.deck.discard_pile.is_empty():
 		discard_stack.empty()

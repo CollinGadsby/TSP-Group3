@@ -11,7 +11,7 @@ class_name GameManager
 @onready var block_screen_label = get_node("../UI/BlockScreen/Label")
 @onready var hand_view = get_node("../PlayerHand")
 @onready var turn_label = get_node("../UI/TurnLabel")
-@onready var how_to_play = get_node("../UI/HowToPlay")  
+@onready var how_to_play = get_node("../UI/HowToPlay")
 @onready var how_to_play_button = get_node("../UI/HowToPlayButton")
 
 signal hand_changed
@@ -46,14 +46,17 @@ var state: GlobalEnums.GameState = GlobalEnums.GameState.WAITING
 var going_out_player_index: int = -1  # index of the player who went out, -1 if not in last round
 var last_round_remaining: Array = []  # player indices still to take their final turn
 
-func _ready() -> void: # This runs before pass_the_device_is_true
-	if get_node("../../../PassTheDevice"):
-		return
+func _ready() -> void:
+	# FIX: Connect scoreboard and how_to_play buttons before the early return so
+	# they work in pass-the-device mode too.
 	scoreboard_button.pressed.connect(_on_scoreboard_button_pressed)
+	how_to_play_button.pressed.connect(how_to_play.show_panel)
+
+	if get_node_or_null("../../../PassTheDevice") != null:
+		return
+
 	NetworkManager.action_received.connect(_on_network_action)
 
-	how_to_play_button.pressed.connect(how_to_play.show_panel) 
-	
 	var names = ["Player"]
 	for i in range(GameConfig.bot_count):
 		names.append("Bot %d " % (i + 1))
@@ -75,7 +78,7 @@ func start_game(player_names):
 		else:
 			p.is_bot = i != 0  # Singleplayer: only player 0 is human
 		players.append(p)
-		print("Created player: ", p.name, " is_bot: ", p.is_bot)  # ← add this
+		print("Created player: ", p.name, " is_bot: ", p.is_bot)
 
 	
 	discard_stack.discard_stack_pos()
@@ -139,6 +142,7 @@ func start_tutorial(id: int) -> void:
 	emit_signal("debug_data_changed")
 
 func start_round():
+	AudioManager.play(AudioManager.SFX_SHUFFLE)
 	round_index += 1
 	round_label.bbcode_text = "[color=%s]%s%d[/color]" % ["white", "Round: ", round_index]
 	#Resets values from previous round
@@ -148,13 +152,15 @@ func start_round():
 	
 	current_player_index = 0
 	
-	var number_of_decks = 1
+	var number_of_decks = ceil(players.size()/3.0)
+	print("Number of Decks: ", number_of_decks)
 	deck = Deck.new(number_of_decks)
 	
 	for p in players:
 		p.hand.clear()
 		p.round_score = 0
-		
+	
+
 	deal_cards(round_index + 2)
 	
 	state = GlobalEnums.GameState.DRAWING
@@ -168,8 +174,8 @@ func start_round():
 	hand_view.refresh()
 	if SteamManager.is_host or _is_singleplayer():
 		try_start_bot_turn()
-			
-	
+		
+
 func deal_cards(number_of_cards: int):
 	for i in range(number_of_cards):
 		for p in players:
@@ -177,6 +183,7 @@ func deal_cards(number_of_cards: int):
 			
 	deck.discard(deck.draw_card())	# Flip top card
 	discard_stack.setup(deck.discard_pile[deck.discard_pile.size() - 1])
+
 			
 func get_current_player():
 	return players[current_player_index]
@@ -218,6 +225,7 @@ func draw_from_deck():
 	emit_signal("hand_changed")
 	emit_signal("draw_from_deck_sig")
 	update_turn_label()
+	AudioManager.play(AudioManager.SFX_DRAW)
 	
 func draw_from_discard():
 	var player = get_current_player()
@@ -232,6 +240,7 @@ func draw_from_discard():
 	state = GlobalEnums.GameState.DISCARDING
 	emit_signal("debug_data_changed")
 	update_turn_label()
+	AudioManager.play(AudioManager.SFX_DRAW)
 	
 func discard_card(index):
 	var player = get_current_player()
@@ -240,6 +249,7 @@ func discard_card(index):
 	state = GlobalEnums.GameState.WAITING
 	emit_signal("hand_changed")
 	update_turn_label()
+	AudioManager.play(AudioManager.SFX_DISCARD)
 	
 func play_bot_turn():
 	# Stop if round is ending
@@ -323,7 +333,6 @@ func play_bot_turn():
 		return
 	
 	# Check for going out
-		# Check for going out
 	if going_out_player_index == -1:
 		# Only allow going out if NOT already in last round
 		if Validator.validate_out(player.hand, round_index + 2):
@@ -441,8 +450,8 @@ func _on_verify_button_pressed() -> void:
 	if Validator.validate_out(player_cards, round_index + 2):
 		print("VALID HAND — PLAYER GOES OUT")
 		if going_out_player_index != -1:
-			# Already in the last round — this player scores 0, just pass
-			_on_pass_button_pressed()
+			# Already in the last round — this player scores 0, just end their turn
+			_end_turn()
 		else:
 			trigger_last_round(current_player_index)
 	else:
@@ -455,10 +464,15 @@ func _on_pass_button_pressed() -> void:
 	if is_ending_round:
 		print("PASS BLOCKED: round ending")
 		return
-		
-	if state != GlobalEnums.GameState.WAITING and state != GlobalEnums.GameState.DRAWING:
+
+	# FIX: Only allow passing after discarding (WAITING state).
+	# Previously also allowed DRAWING which caused double-advance.
+	if state != GlobalEnums.GameState.WAITING:
+		print("PASS BLOCKED: wrong state")
 		return
-	# Prevent acting twice in same frame / wrong player
+
+	# FIX: Skip turn ownership check when host is processing a network action
+	# on behalf of a client — handled by _on_network_action calling _end_turn directly.
 	if not _is_my_turn():
 		print("PASS BLOCKED: not your turn")
 		return
@@ -467,6 +481,7 @@ func _on_pass_button_pressed() -> void:
 	emit_signal("debug_data_changed")
 
 	_end_turn()
+
 # Called when a player successfully goes out
 func trigger_last_round(out_player_index: int) -> void:
 	turn_locked = true
@@ -486,20 +501,19 @@ func trigger_last_round(out_player_index: int) -> void:
 	else:
 		state = GlobalEnums.GameState.DRAWING
 		emit_signal("debug_data_changed")
-		
-		# Show "going out" announcement briefly before proceeding
-		block_screen_label.text = "%s went out!\nOne final turn each." % players[out_player_index].name
-		block_screen.visible = true
-		await get_tree().create_timer(2.2).timeout
-		block_screen.visible = false
 		turn_locked = false
-		
-		
-		_advance_to_next_last_round_player()
-		
+
+		# FIX: Don't advance here — show the block screen and let its dismissal
+		# call _advance_to_next_last_round_player. Advancing here caused the first
+		# last-round player to be skipped.
 		if pass_the_device_mode:
-			block_screen_label.text = "Player: %d" % (current_player_index + 1)
-			block_screen.visible = true
+			block_screen_label.text = "%s went out!\nPlayer %d's final turn" % [
+				players[out_player_index].name,
+				last_round_remaining[0] + 1
+			]
+		else:
+			block_screen_label.text = "%s went out!\nOne final turn each." % players[out_player_index].name
+		block_screen.visible = true
 
 func _advance_to_next_last_round_player() -> void:
 	if last_round_remaining.is_empty():
@@ -507,7 +521,7 @@ func _advance_to_next_last_round_player() -> void:
 			end_round()
 		return
 
-	var idx = last_round_remaining.pop_front()  # ← KEY FIX
+	var idx = last_round_remaining.pop_front()
 	if idx == going_out_player_index:
 		return _advance_to_next_last_round_player()
 	
@@ -516,6 +530,7 @@ func _advance_to_next_last_round_player() -> void:
 	state = GlobalEnums.GameState.DRAWING
 	emit_signal("debug_data_changed")
 	
+	# FIX: Never show a bot's hand — always bind to the human player in singleplayer.
 	if pass_the_device_mode:
 		hand_view.player_data = players[current_player_index]
 	else:
@@ -526,7 +541,6 @@ func _advance_to_next_last_round_player() -> void:
 	if get_current_player().is_bot:
 		call_deferred("try_start_bot_turn")
 	
-		
 
 # Score all players and start the next round
 func end_round() -> void:
@@ -551,8 +565,6 @@ func end_round() -> void:
 		summary += "%s: +%d pts (total %d)\n" % [p.name, p.round_score, p.score]
 	block_screen_label.text = summary.strip_edges()
 	block_screen.visible = true
-	await get_tree().create_timer(3.0).timeout
-	block_screen.visible = false
 	
 	# Broadcast scores NOW, before start_round() increments round_index.
 	# Clients need to update the scoreboard for the round that just ended.
@@ -562,7 +574,6 @@ func end_round() -> void:
 	print("END")
 	start_round()
 	is_ending_round = false
-
 
 	# Broadcast again after start_round() so clients get the new deck's discard top,
 	# updated round_index, and cleared hands.
@@ -579,28 +590,38 @@ func _end_turn():
 				end_round()
 			return
 
-		call_deferred("_advance_to_next_last_round_player")
+		# FIX (pass-the-device): Show block screen with the next player's number,
+		# let block_screen_view._on_button_pressed call _advance_to_next_last_round_player.
+		# FIX (online/singleplayer): Advance immediately as before.
+		if pass_the_device_mode:
+			var next_idx = last_round_remaining[0]
+			block_screen_label.text = "Player: %d" % (next_idx + 1)
+			block_screen.visible = true
+		else:
+			call_deferred("_advance_to_next_last_round_player")
 		return
 
 	# NORMAL TURN FLOW
-	if SteamManager.is_host or _is_singleplayer() or pass_the_device_mode:
+	# FIX: In pass-the-device, advance the turn THEN show the block screen.
+	# The block screen dismissal just reveals the already-current player's hand —
+	# it must NOT call next_turn() again or the turn advances twice.
+	if pass_the_device_mode:
 		next_turn()
-
-	# ALWAYS reset to DRAWING for next player
-	state = GlobalEnums.GameState.DRAWING
-	emit_signal("debug_data_changed")
-
-	if pass_the_device_mode:
-		hand_view.player_data = players[current_player_index]
-	else:
-		hand_view.player_data = players[my_player_index]
-
-	hand_view.refresh()
-	update_turn_label()
-
-	if pass_the_device_mode:
+		state = GlobalEnums.GameState.DRAWING
+		emit_signal("debug_data_changed")
 		block_screen_label.text = "Player: %d" % (current_player_index + 1)
 		block_screen.visible = true
+	else:
+		if SteamManager.is_host or _is_singleplayer():
+			next_turn()
+		state = GlobalEnums.GameState.DRAWING
+		emit_signal("debug_data_changed")
+		if pass_the_device_mode:
+			hand_view.player_data = players[current_player_index]
+		else:
+			hand_view.player_data = players[my_player_index]
+		hand_view.refresh()
+		update_turn_label()
 		
 func _on_scoreboard_button_pressed() -> void:
 	scoreboard.visible = !scoreboard.visible
@@ -635,7 +656,6 @@ func request_discard_card(index: int) -> void:
 
 func _is_my_turn() -> bool:
 	if pass_the_device_mode:
-		# Only allow actions when it's a valid interaction state
 		return state == GlobalEnums.GameState.DRAWING \
 			or state == GlobalEnums.GameState.DISCARDING \
 			or state == GlobalEnums.GameState.WAITING
@@ -648,20 +668,27 @@ func _on_network_action(data: Dictionary) -> void:
 		return
 	if not SteamManager.is_host:
 		return
+	# FIX: Host processes actions on behalf of clients so we call the internal
+	# functions directly, bypassing _is_my_turn() and state guards which are
+	# designed for local input only.
 	match data.action:
-		"draw_deck":    draw_from_deck();    _broadcast_state()
-		"draw_discard": draw_from_discard(); _broadcast_state()
-		"discard":      discard_card(data.index); _broadcast_state()
+		"draw_deck":    draw_from_deck();          _broadcast_state()
+		"draw_discard": draw_from_discard();       _broadcast_state()
+		"discard":      discard_card(data.index);  _broadcast_state()
 		"go_out":       _on_verify_button_pressed(); _broadcast_state()
-		"pass":         _on_pass_button_pressed(); _broadcast_state()
+		"pass":         _end_turn();               _broadcast_state()
 		
 func _broadcast_state() -> void:
-	# Build base state without any hand cards
 	var state_data = {
 		"type": "state",
 		"current_player": current_player_index,
 		"round": round_index,
 		"game_state": state,
+		# FIX: Include last-round state so clients know when the final round is
+		# in progress and whose turn remains. Without this, clients never set
+		# going_out_player_index and the last-round logic never fires for them.
+		"going_out_player": going_out_player_index,
+		"last_round_remaining": last_round_remaining.duplicate(),
 		"discard_top": _serialize_card(deck.discard_pile.back()) if deck.discard_pile.size() > 0 else null,
 		"hands": [],
 		"scores": []
@@ -691,6 +718,10 @@ func _apply_state(data: Dictionary) -> void:
 	round_index = data.round
 	state = data.game_state
 	my_player_index = data.my_index
+	# FIX: Restore last-round state from broadcast. Use .get() with fallbacks so
+	# clients on older builds don't crash if the field is missing.
+	going_out_player_index = data.get("going_out_player", -1)
+	last_round_remaining = data.get("last_round_remaining", [])
 	# Update scores, hand sizes, your own hand, discard top
 	for i in range(players.size()):
 		players[i].score = data.scores[i].score
@@ -714,7 +745,6 @@ func _apply_state(data: Dictionary) -> void:
 		hand_view.player_data = players[current_player_index]
 	else:
 		hand_view.player_data = players[my_player_index]
-
 	hand_view.refresh()
 	
 	
@@ -735,6 +765,21 @@ func update_turn_label() -> void:
 	var player = get_current_player()
 	var name = player.name
 	var message: String
+
+	# FIX: Pass-the-device always uses the current player's name since every
+	# player at the device is "the active player" from their own perspective.
+	if pass_the_device_mode:
+		match state:
+			GlobalEnums.GameState.DRAWING:
+				message = "%s's turn — draw a card" % name
+			GlobalEnums.GameState.DISCARDING:
+				message = "%s's turn — discard a card" % name
+			GlobalEnums.GameState.WAITING:
+				message = "%s — go out or pass your turn" % name
+			_:
+				message = ""
+		turn_label.text = message
+		return
 
 	match state:
 		GlobalEnums.GameState.DRAWING:
@@ -762,6 +807,9 @@ func update_turn_label() -> void:
 func request_go_out() -> void:
 	if not _is_my_turn():
 		return
+	# FIX: Only allow going out after discarding (WAITING state).
+	if state != GlobalEnums.GameState.WAITING:
+		return
 	if SteamManager.is_host or _is_singleplayer():
 		_on_verify_button_pressed()
 		_broadcast_state()
@@ -770,6 +818,9 @@ func request_go_out() -> void:
 
 func request_pass_turn() -> void:
 	if not _is_my_turn():
+		return
+	# FIX: Only allow passing after discarding (WAITING state).
+	if state != GlobalEnums.GameState.WAITING:
 		return
 	if SteamManager.is_host or _is_singleplayer():
 		_on_pass_button_pressed()

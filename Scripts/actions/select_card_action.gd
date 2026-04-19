@@ -17,7 +17,7 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			var card_node = get_parent().get_parent()
 			var select_offset = 40
-
+			AudioManager.play(AudioManager.SFX_MOVECARD)
 			# No selected card
 			if game_manager.get_current_player().selected_card == null:
 				game_manager.get_current_player().selected_card = card_node

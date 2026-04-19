@@ -74,6 +74,17 @@ theme_override_fonts/font = ExtResource("2_byqcc")
 theme_override_font_sizes/font_size = 30
 text = "How To Play"
 
+[node name="Mute" type="Button" parent="Button_manager" unique_id=1394072460]
+layout_mode = 0
+offset_left = 1018.0
+offset_top = 69.0
+offset_right = 1118.0
+offset_bottom = 122.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_byqcc")
+theme_override_font_sizes/font_size = 30
+text = "Mute"
+
 [node name="Label" type="Label" parent="." unique_id=518145859]
 offset_right = 1152.0
 offset_bottom = 183.0
@@ -99,3 +110,4 @@ size_flags_stretch_ratio = 1.1
 [connection signal="pressed" from="Button_manager/Multiplayer" to="." method="_on_multiplayer_pressed"]
 [connection signal="pressed" from="Button_manager/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="Button_manager/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Button_manager/Mute" to="." method="_on_mute_button_pressed"]

@@ -1,15 +1,18 @@
 [gd_scene format=3 uid="uid://cnqb5u1nlmw1"]
 
+[ext_resource type="Texture2D" uid="uid://cvhdsgn81442h" path="res://Assets/Background.png" id="1_5dspg"]
 [ext_resource type="Script" uid="uid://cup73yuo2o3wg" path="res://Scripts/views/player_hand_view.gd" id="1_em1bs"]
 [ext_resource type="PackedScene" uid="uid://dt684w0v0a54m" path="res://Scenes/cards/card.tscn" id="2_0rn35"]
 [ext_resource type="PackedScene" uid="uid://6huqwqcd8ot2" path="res://Scenes/Scoreboard/score_board.tscn" id="3_jxptm"]
 [ext_resource type="Script" uid="uid://cdvcppo2gubb8" path="res://Scripts/managers/game_manager.gd" id="3_kjrfb"]
 [ext_resource type="Script" uid="uid://jxc8r05du004" path="res://Scripts/views/block_screen_view.gd" id="4_ktwa8"]
+[ext_resource type="Theme" uid="uid://blstpk1rj2nx" path="res://Assets/theme.tres" id="4_q4m2g"]
 [ext_resource type="Script" uid="uid://84kuv6ttqjh6" path="res://Scripts/views/deck_view.gd" id="4_se30j"]
 [ext_resource type="PackedScene" uid="uid://c2nl7lf6dl8ps" path="res://Scenes/ui/how_to_play.tscn" id="4_uj3lb"]
 [ext_resource type="PackedScene" uid="uid://cduj8ox12bd4m" path="res://Scenes/cards/deck_stack.tscn" id="5_ktwa8"]
 [ext_resource type="PackedScene" uid="uid://bsf63rcisxxvt" path="res://Scenes/cards/discard_stack.tscn" id="6_157ky"]
 [ext_resource type="PackedScene" uid="uid://bxboc4jqtqs77" path="res://Scenes/debug/debug_overlay.tscn" id="7_0rn35"]
+[ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="7_kctc5"]
 
 [sub_resource type="GDScript" id="GDScript_ve7bo"]
 script/source = "extends Node2D
@@ -20,7 +23,6 @@ script/source = "extends Node2D
 @onready var debug_overlay = $DebugOverlay
 
 func _ready():
-	get_window().reset_size()
 	if get_parent().name == \"Tutorial\":
 		return
 		
@@ -71,14 +73,20 @@ func _on_pressed() -> void:
 	game_manager.request_pass_turn()
 "
 
-[node name="GameScene3" type="Node2D" unique_id=116851192]
+[node name="GameScene4" type="Node2D" unique_id=116851192]
 script = SubResource("GDScript_ve7bo")
 
+[node name="TextureRect" type="TextureRect" parent="." unique_id=2070762420]
+offset_right = 350.0
+offset_bottom = 200.0
+scale = Vector2(3.527, 4)
+texture = ExtResource("1_5dspg")
+stretch_mode = 1
+
 [node name="PlayerHand" type="Node2D" parent="." unique_id=2020304673]
+position = Vector2(-40, 0)
 script = ExtResource("1_em1bs")
 card_scene = ExtResource("2_0rn35")
-
-[node name="TableSprite" type="Sprite2D" parent="." unique_id=1602557932]
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1536027237]
 
@@ -86,38 +94,43 @@ card_scene = ExtResource("2_0rn35")
 offset_left = 992.0
 offset_right = 1151.0
 offset_bottom = 40.0
+theme = ExtResource("4_q4m2g")
 bbcode_enabled = true
 text = "Round: 
 "
 horizontal_alignment = 2
 
 [node name="VerifyButton" type="Button" parent="UI" unique_id=333772567]
-offset_left = 23.0
-offset_top = 352.0
-offset_right = 86.0
-offset_bottom = 383.0
+offset_left = 20.0
+offset_top = 346.0
+offset_right = 144.0
+offset_bottom = 385.0
+theme = ExtResource("4_q4m2g")
 text = "Go Out"
 
 [node name="PassButton" type="Button" parent="UI" unique_id=502239468]
-offset_left = 24.0
+offset_left = 20.0
 offset_top = 387.0
-offset_right = 108.0
-offset_bottom = 418.0
+offset_right = 144.0
+offset_bottom = 426.0
+theme = ExtResource("4_q4m2g")
 text = "Finish Turn"
 script = SubResource("GDScript_dpgfu")
 
 [node name="LeaveButton" type="Button" parent="UI" unique_id=1443577886]
-offset_left = 23.0
+offset_left = 20.0
 offset_top = 113.0
-offset_right = 126.0
-offset_bottom = 144.0
+offset_right = 144.0
+offset_bottom = 152.0
+theme = ExtResource("4_q4m2g")
 text = "Leave Game"
 
 [node name="ScoreboardButton" type="Button" parent="UI" unique_id=463784376]
-offset_left = 1056.0
+offset_left = 1000.0
 offset_top = 29.0
-offset_right = 1154.0
-offset_bottom = 60.0
+offset_right = 1125.0
+offset_bottom = 68.0
+theme = ExtResource("4_q4m2g")
 text = "ScoreBoard"
 
 [node name="ScoreBoard" parent="UI" unique_id=592244676 instance=ExtResource("3_jxptm")]
@@ -131,51 +144,69 @@ offset_right = -552.0
 offset_bottom = -340.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("4_q4m2g")
 
 [node name="BlockScreen" type="ColorRect" parent="UI" unique_id=302551451]
 visible = false
 z_index = 1
 z_as_relative = false
-offset_right = 1179.0
-offset_bottom = 667.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0.06879827, 0.06879828, 0.06879828, 1)
 script = ExtResource("4_ktwa8")
 
 [node name="Button" type="Button" parent="UI/BlockScreen" unique_id=1624367836]
 layout_mode = 0
-offset_left = 461.0
+offset_left = 450.0
 offset_top = 430.0
-offset_right = 698.0
+offset_right = 700.0
 offset_bottom = 479.0
+theme = ExtResource("4_q4m2g")
 text = "Continue"
 
 [node name="Label" type="Label" parent="UI/BlockScreen" unique_id=807486732]
-layout_mode = 0
-offset_left = 461.0
-offset_top = 280.0
-offset_right = 710.0
-offset_bottom = 356.0
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 288.0
+offset_top = -133.0
+offset_right = -288.0
+offset_bottom = -98.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_q4m2g")
+theme_override_fonts/font = ExtResource("7_kctc5")
 theme_override_font_sizes/font_size = 32
-text = "Player: ?"
+text = "Player: ? "
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="TurnLabel" type="Label" parent="UI" unique_id=2134026412]
-offset_left = 521.0
-offset_top = 440.0
-offset_right = 721.0
-offset_bottom = 467.0
+z_index = -1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 403.0
+offset_bottom = 437.0
+grow_horizontal = 2
+theme = ExtResource("4_q4m2g")
 theme_override_font_sizes/font_size = 24
 horizontal_alignment = 1
 
 [node name="HowToPlayButton" type="Button" parent="UI" unique_id=1534766301]
-offset_left = 1055.0
+offset_left = 1000.0
 offset_top = 66.0
-offset_right = 1158.0
-offset_bottom = 97.0
+offset_right = 1125.0
+offset_bottom = 105.0
+theme = ExtResource("4_q4m2g")
 text = "How To Play"
 
 [node name="HowToPlay" parent="UI" unique_id=1661021046 instance=ExtResource("4_uj3lb")]
+theme = ExtResource("4_q4m2g")
 
 [node name="GameManager" type="Node2D" parent="." unique_id=156775829]
 script = ExtResource("3_kjrfb")

@@ -1,0 +1,7 @@
+[gd_resource type="Theme" format=3 uid="uid://blstpk1rj2nx"]
+
+[ext_resource type="FontFile" uid="uid://ci7vlu0rmjn4d" path="res://Assets/Jersey10-Regular.ttf" id="1_0dftj"]
+
+[resource]
+Button/font_sizes/font_size = 28
+Button/fonts/font = ExtResource("1_0dftj")

@@ -37,7 +37,7 @@ func _on_start_pressed() -> void:
 	
 	GameConfig.bot_count = bot_count
 	
-	get_tree().change_scene_to_file("res://scenes/main/game.tscn")
+	get_tree().change_scene_to_file("res://Scenes/main/game.tscn")
 
 func _on_back_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/main/main_menu.tscn")
+	get_tree().change_scene_to_file("res://Scenes/main/main_menu.tscn")

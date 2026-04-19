@@ -22,6 +22,7 @@ PassTheDeviceSettings="*uid://dtrwu4krvgsun"
 SteamManager="*res://Scripts/managers/steam_manager.gd"
 NetworkManager="*res://Scripts/managers/network_manager.gd"
 GameConfig="*uid://hxyer08675ev"
+AudioManager="*uid://bbkayq15xt6a8"
 
 [display]
 
